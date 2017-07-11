@@ -1,12 +1,15 @@
 NAME = ExpertSystem
 
 SRC = ./src/main.cpp \
-./src/MainController.cpp
+./src/MainController.cpp \
+./src/InputController.cpp \
+./src/InputController_FileOpening.cpp \
+./src/InputController_LexerParser.cpp \
+./src/ExceptionsHandler.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
 CC = clang++ -Wall -Werror -Wextra
-
 
 all: $(NAME)
 

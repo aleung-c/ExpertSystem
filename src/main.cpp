@@ -1,11 +1,11 @@
 #include "../includes/ExpertSystem.hpp"
 
-int		main(void)
+int		main(int argc, char **argv)
 {
 	t_ExpertSystem		ExpertSystemDatas;
 	MainController		*MainController;
 
 	MainController = new class MainController(ExpertSystemDatas);
-	std::cout << KYEL "Hello ExpertSystem!" KRESET << std::endl;
+	MainController->Run(argc, argv);
 	return (0);
 }

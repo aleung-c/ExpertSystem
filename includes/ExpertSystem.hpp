@@ -30,6 +30,9 @@
 # include <list>
 # include <vector>
 # include <string>
+# include <string.h>
+# include <sys/types.h>
+# include <sys/stat.h>
 # include <random>
 # include <algorithm>
 # include <math.h>
@@ -41,7 +44,7 @@
 //																//
 // ------------------------------------------------------------	//
 
-# define DEF_VAL_EXAMPLE 0
+# define MAX_FILE_NAME_LEN 50
 
 // ------------------------------------------------------------	//
 //	Enum														//
@@ -61,7 +64,7 @@ typedef enum		e_ExampleEnum
 
 typedef struct			s_ExpertSystem
 {
-
+	std::string			FileString;
 
 
 }						t_ExpertSystem;
@@ -71,11 +74,17 @@ typedef struct			s_ExpertSystem
 //																//
 // ------------------------------------------------------------	//
 
+class					InputController;
 class					MainController;
 
 /*
 **	Include for classes. Order matters for dependencies.
+**	Being the top most class, MainController should always be at
+**	the LOWEST position, as it will call all the others.
 */
+
+# include "../includes/InputController.hpp"
+# include "../includes/ExceptionsHandler.hpp"
 
 # include "../includes/MainController.hpp"
 
