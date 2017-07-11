@@ -37,6 +37,7 @@
 # include <algorithm>
 # include <math.h>
 # include <map>
+# include <regex>
 
 
 // ------------------------------------------------------------	//
@@ -51,16 +52,29 @@
 //																//
 // ------------------------------------------------------------	//
 
-typedef enum		e_ExampleEnum
+typedef enum		e_TokenType
 {
-	VAL1,
-	VAL2
-}					t_example_enum;
+	VALUE,
+	OPERAND,
+	FACT,
+	QUERY,
+	ERROR
+}					t_TokenType;
 
 // ------------------------------------------------------------	//
 //	Structs														//
 //																//
 // ------------------------------------------------------------	//
+
+typedef struct			s_token
+{
+	std::string			Value;
+	t_TokenType			TokenType;
+	int					LineNumber;
+	int					NumberInLine;
+	bool				EntryParenthesis;
+	bool				ExitParenthesis;
+}						t_token;
 
 typedef struct			s_ExpertSystem
 {

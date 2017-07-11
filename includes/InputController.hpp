@@ -27,18 +27,23 @@ class InputController
 		void					FillValues();
 
 	private:
-		int						checkArgs();
-		void					printUsage();
-
-		std::string				ReadFromFile(std::string path);
-
+		bool					_initialized;
 		t_ExpertSystem			*_expertSystemDatas;
 		int						_argc;
-		char					**_argv;
-
-		bool					_initialized;
-
+		char					**_argv;		
 		std::ifstream			_currentFile;
+
+		// File Opening
+		int						checkArgs();
+		void					printUsage();
+		std::string				ReadFromFile(std::string path);
+
+		// Lexer Parser
+		std::list<t_token>		_tokenList; // local list of tokens.
+
+		void					lexInput();
+		void					parseTokenTypes();
+		int						tokenTypeCheck();
 };
 
 #endif
