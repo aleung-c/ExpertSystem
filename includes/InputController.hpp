@@ -21,7 +21,8 @@ class InputController
 		InputController();
 		~InputController();
 
-		void					Init(t_ExpertSystem *expertSystemDatas, int argc, char **argv);
+		void					Init(t_ExpertSystem *expertSystemDatas,
+										int argc, char **argv);
 		void					GetInput();
 		void					LexParse();
 		void					FillValues();
@@ -36,7 +37,7 @@ class InputController
 		// File Opening
 		int						checkArgs();
 		void					printUsage();
-		std::string				ReadFromFile(std::string path);
+		std::string				readFromFile(std::string path);
 
 		// Lexer Parser
 		std::list<t_token>		_tokenList; // local list of tokens.
@@ -44,6 +45,7 @@ class InputController
 		void					lexInput();
 		void					parseTokenTypes();
 		int						tokenTypeCheck();
+		int						checkTokenPositions();
 };
 
 #endif

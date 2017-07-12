@@ -21,7 +21,9 @@ void		InputController::LexParse()
 		lexInput();
 		parseTokenTypes();
 		if (tokenTypeCheck() != 0)
-			throw CustomException("InputController: Parser: invalid token.");
+			throw CustomException(KRED "InputController: Parser: invalid token." KRESET);
+		if (checkTokenPositions() != 0)
+			throw CustomException(KRED "InputController: Parser: invalid token position." KRESET);
 	}
 }
 
@@ -73,7 +75,7 @@ void		InputController::parseTokenTypes()
 		// regexes for VALUE, OPERAND, FACT, QUERY.
 		if (std::regex_match((*it).Value, std::regex("^!?\\(?[A-Z]\\)?$")))
 		{
-			(*it).TokenType = VALUE;
+			(*it).TokenType = FACT;
 			// CHECKING FOR PARENTHESIS SIDE - Entry or exit ?
 			if ((*it).Value.find("(") != std::string::npos)
 				(*it).EntryParenthesis = true;
@@ -86,7 +88,7 @@ void		InputController::parseTokenTypes()
 		}
 		else if (std::regex_match((*it).Value, std::regex("^=[A-Z]*$")))
 		{
-			(*it).TokenType = FACT;
+			(*it).TokenType = INIT_FACTS;
 		}
 		else if (std::regex_match((*it).Value, std::regex("^\\?[A-Z]+$")))
 		{
@@ -102,12 +104,12 @@ void		InputController::parseTokenTypes()
 	for(std::list<t_token>::iterator it = _tokenList.begin(); it != _tokenList.end() ; it++)
 	{
 		printf("token : line %d col %d -", (*it).LineNumber,(*it).NumberInLine);
-		if ((*it).TokenType == VALUE)
-			printf(" type = VALUE");
+		if ((*it).TokenType == FACT)
+			printf(" type = FACT");
 		else if ((*it).TokenType == OPERAND)
 			printf(" type = OPERAND");
-		else if ((*it).TokenType == FACT)
-			printf(" type = FACT");
+		else if ((*it).TokenType == INIT_FACTS)
+			printf(" type = INIT_FACTS");
 		else if ((*it).TokenType == QUERY)
 			printf(" type = QUERY");
 		else if ((*it).TokenType == ERROR)
@@ -127,7 +129,7 @@ void		InputController::parseTokenTypes()
 
 int					InputController::tokenTypeCheck()
 {
-	int nbOfErrors = 0;
+	int		nbOfErrors = 0;
 
 	for(std::list<t_token>::iterator it = _tokenList.begin(); it != _tokenList.end() ; it++)
 	{
@@ -138,6 +140,45 @@ int					InputController::tokenTypeCheck()
 			<< (*it).NumberInLine << ": Invalid syntax: \""
 			<< (*it).Value << "\"" << std::endl;
 		}
+	}
+	if (nbOfErrors != 0)
+	{
+		return (-1);
+	}
+	return (0); // All green;
+}
+
+/*
+**	Second pass on the tokens: are they rightly placed?
+**	For example, we cannot have an operand at the start of a line.
+*/
+
+int				InputController::checkTokenPositions()
+{
+	int		nbOfErrors = 0;
+	// std::list<t_token>::iterator next;
+
+	for (std::list<t_token>::iterator it = _tokenList.begin(); it != _tokenList.end() ; it++)
+	{
+		// next = it++;
+		// check for operand at start of line.
+		if ((*it).NumberInLine == 0 && (*it).TokenType == OPERAND)
+		{
+			nbOfErrors += 1;
+			std::cout << KRED "Line " << (*it).LineNumber << " col "
+			<< (*it).NumberInLine << ": Operand cannot be first on line: \""
+			<< (*it).Value << "\"" KRESET << std::endl;
+		}
+		// check for solo operand on end of line. TODO: not working
+		// if ((*it).TokenType == OPERAND
+		// 	&& ((next != _tokenList.end() && (*it).LineNumber != (*next).LineNumber)
+		// 	|| next == _tokenList.end()))
+		// {
+		// 	nbOfErrors += 1;
+		// 	std::cout << KRED "Line " << (*it).LineNumber << " col "
+		// 	<< (*it).NumberInLine << ": Operand cannot finish line: \""
+		// 	<< (*it).Value << "\"" KRESET << std::endl;
+		// }
 	}
 	if (nbOfErrors != 0)
 	{

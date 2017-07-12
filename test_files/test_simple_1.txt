@@ -1,0 +1,7 @@
+# simple test with A, B, C
+
+A + B => C
+
+=B
+
+?C

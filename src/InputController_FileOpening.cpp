@@ -15,7 +15,7 @@ void		InputController::GetInput()
 	{
 		throw CustomException(KRED "InputController: Invalid argument\n" KRESET);
 	}
-	_expertSystemDatas->FileString = ReadFromFile(_argv[1]);
+	_expertSystemDatas->FileString = readFromFile(_argv[1]);
 	// debug print;
 	std::cout << std::endl << "Opened file (comments cleaned):"
 		<< std::endl << _expertSystemDatas->FileString << std::endl;
@@ -58,7 +58,7 @@ void		InputController::printUsage()
 **	as we wont use them.
 */
 
-std::string			InputController::ReadFromFile(std::string path)
+std::string			InputController::readFromFile(std::string path)
 {
 	std::string		line;
 	std::string		ret;

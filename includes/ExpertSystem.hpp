@@ -54,9 +54,9 @@
 
 typedef enum		e_TokenType
 {
-	VALUE,
-	OPERAND,
 	FACT,
+	OPERAND,
+	INIT_FACTS,
 	QUERY,
 	ERROR
 }					t_TokenType;
