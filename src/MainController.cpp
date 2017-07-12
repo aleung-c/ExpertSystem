@@ -8,7 +8,6 @@
 MainController::MainController(t_ExpertSystem &expertSystemDatas)
 {
 	ExpertSystemDatas = &expertSystemDatas; // publicly available.
-	std::cout << KGRN "MainController:: ----- initialized." KRESET << std::endl;
 }
 
 MainController::~MainController()

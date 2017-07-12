@@ -17,7 +17,7 @@ void		InputController::GetInput()
 	}
 	_expertSystemDatas->FileString = readFromFile(_argv[1]);
 	// debug print;
-	std::cout << std::endl << "Opened file (comments cleaned):"
+	std::cout << KYEL "Opened file (comments cleaned): --------------------" KRESET
 		<< std::endl << _expertSystemDatas->FileString << std::endl;
 }
 
@@ -77,7 +77,7 @@ std::string			InputController::readFromFile(std::string path)
 	_currentFile.open(path);
 	if (_currentFile.is_open())
 	{
-		std::cout << KGRN " -- Program file opened" KRESET << std::endl;
+		
 		while (getline(_currentFile, line))
 		{
 			// Comment cleaning at reading.
@@ -89,6 +89,7 @@ std::string			InputController::readFromFile(std::string path)
 			ret += "\n";
 		}
 		_currentFile.close();
+		std::cout << KGRN "InputController: File opening success" KRESET << std::endl;
 		return (ret);
 	}
 	else

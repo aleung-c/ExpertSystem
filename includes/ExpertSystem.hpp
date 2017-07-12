@@ -55,7 +55,7 @@
 typedef enum		e_TokenType
 {
 	FACT,
-	OPERAND,
+	SYMBOL,
 	INIT_FACTS,
 	QUERY,
 	ERROR

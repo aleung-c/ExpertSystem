@@ -46,6 +46,7 @@ class InputController
 		void					parseTokenTypes();
 		int						tokenTypeCheck();
 		int						checkTokenPositions();
+		int						checkTokenDuplicates();
 };
 
 #endif
