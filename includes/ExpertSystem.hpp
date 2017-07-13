@@ -48,48 +48,52 @@
 # define MAX_FILE_NAME_LEN 50
 
 // ------------------------------------------------------------	//
+//	Classes forward declarations								//
+//																//
+// ------------------------------------------------------------	//
+
+class							Rule;
+class							Fact;
+class							InputController;
+class							MainController;
+
+// ------------------------------------------------------------	//
 //	Enum														//
 //																//
 // ------------------------------------------------------------	//
 
-typedef enum		e_TokenType
+typedef enum					e_TokenType
 {
 	FACT,
 	SYMBOL,
 	INIT_FACTS,
 	QUERY,
 	ERROR
-}					t_TokenType;
+}								t_TokenType;
 
 // ------------------------------------------------------------	//
 //	Structs														//
 //																//
 // ------------------------------------------------------------	//
 
-typedef struct			s_token
+typedef struct					s_token
 {
-	std::string			Value;
-	t_TokenType			TokenType;
-	int					LineNumber;
-	int					NumberInLine;
-	bool				EntryParenthesis;
-	bool				ExitParenthesis;
-}						t_token;
+	std::string					Value;
+	t_TokenType					TokenType;
+	int							LineNumber;
+	int							NumberInLine;
+	bool						EntryParenthesis;
+	bool						ExitParenthesis;
+}								t_token;
 
-typedef struct			s_ExpertSystem
+typedef struct					s_ExpertSystem
 {
-	std::string			FileString;
+	std::string					FileString;
+
+	std::map<char, Fact *>		AllFacts;
+}								t_ExpertSystem;
 
 
-}						t_ExpertSystem;
-
-// ------------------------------------------------------------	//
-//	Classes forward declarations								//
-//																//
-// ------------------------------------------------------------	//
-
-class					InputController;
-class					MainController;
 
 /*
 **	Include for classes. Order matters for dependencies.
@@ -97,6 +101,8 @@ class					MainController;
 **	the LOWEST position, as it will call all the others.
 */
 
+# include "../includes/Rule.hpp"
+# include "../includes/Fact.hpp"
 # include "../includes/InputController.hpp"
 # include "../includes/ExceptionsHandler.hpp"
 

@@ -2,6 +2,8 @@ NAME = ExpertSystem
 
 SRC = ./src/main.cpp \
 ./src/MainController.cpp \
+./src/Rule.cpp \
+./src/Fact.cpp \
 ./src/InputController.cpp \
 ./src/InputController_FileOpening.cpp \
 ./src/InputController_LexerParser.cpp \
