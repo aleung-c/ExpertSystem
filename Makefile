@@ -6,6 +6,7 @@ SRC = ./src/main.cpp \
 ./src/Fact.cpp \
 ./src/InputController.cpp \
 ./src/InputController_FileOpening.cpp \
+./src/InputController_FillValues.cpp \
 ./src/InputController_LexerParser.cpp \
 ./src/ExceptionsHandler.cpp
 

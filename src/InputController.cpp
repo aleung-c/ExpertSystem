@@ -56,21 +56,5 @@ void		InputController::Init(t_ExpertSystem *expertSystemDatas, int argc, char **
 //	Data collecting												//
 //																//
 // ------------------------------------------------------------	//
-/*
-**	At this point, our datas are lexically and semantically OK,
-**	we now have to scoop them into the desired form in view
-**	of the processing.
-*/
 
-void		InputController::FillValues()
-{
-	if (!_initialized)
-	{
-		throw CustomException(KRED "InputController class not initialized!"
-			" Use InputController::Init([...]) first!" KRESET);
-	}
-	else
-	{
-		// [...]
-	}
-}
+// ----->>	See InputController_FillValues.cpp

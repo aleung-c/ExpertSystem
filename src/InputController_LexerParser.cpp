@@ -22,6 +22,7 @@ void		InputController::LexParse()
 		lexInput();
 		// STEP 2: parse those token to give them a type.
 		parseTokenTypes();
+		//printTokens(); // debug print;
 		// STEP 3 : are any of these token type invalid?
 		if (tokenTypeCheck() != 0)
 			throw CustomException(KRED "InputController: Parser: invalid token." KRESET);
@@ -31,6 +32,7 @@ void		InputController::LexParse()
 		// STEP % : are there forbidden duplicates?
 		if (checkTokenDuplicates() != 0)
 			throw CustomException(KRED "InputController: Parser: missing or duplicate token." KRESET);
+		std::cout << KGRN "InputController: PARSING SUCCESS" KRESET << std::endl;
 	}
 }
 
@@ -106,27 +108,7 @@ void		InputController::parseTokenTypes()
 			(*it).TokenType = ERROR;
 		}
 	}
-	// Debug print: Display token and their stats.
-	printf(KYEL "Tokenized file: --------------------------%s\n", KRESET);
-	for(std::list<t_token>::iterator it = _tokenList.begin(); it != _tokenList.end() ; it++)
-	{
-		printf("token : line %d col %d -", (*it).LineNumber,(*it).NumberInLine);
-		if ((*it).TokenType == FACT)
-			printf(" type = FACT");
-		else if ((*it).TokenType == SYMBOL)
-			printf(" type = SYMBOL");
-		else if ((*it).TokenType == INIT_FACTS)
-			printf(" type = INIT_FACTS");
-		else if ((*it).TokenType == QUERY)
-			printf(" type = QUERY");
-		else if ((*it).TokenType == ERROR)
-			printf(" type = %s*ERROR*%s", KMAG, KRESET);
-		if ((*it).EntryParenthesis == true)
-			printf(" - ENTRY P");
-		else if ((*it).ExitParenthesis == true)
-			printf(" - EXIT P");
-		printf(" : [%s %s %s]\n", KYEL, (*it).Value.c_str(), KRESET);
-	}
+	
 }
 
 /*
@@ -261,4 +243,28 @@ int			InputController::checkTokenDuplicates()
 		return (-1);
 	}
 	return (0); // All green;
+}
+
+void		InputController::printTokens()
+{
+	printf(KYEL "Tokenized file: --------------------------%s\n", KRESET);
+	for(std::list<t_token>::iterator it = _tokenList.begin(); it != _tokenList.end() ; it++)
+	{
+		printf("token : line %d col %d -", (*it).LineNumber,(*it).NumberInLine);
+		if ((*it).TokenType == FACT)
+			printf(" type = FACT");
+		else if ((*it).TokenType == SYMBOL)
+			printf(" type = SYMBOL");
+		else if ((*it).TokenType == INIT_FACTS)
+			printf(" type = INIT_FACTS");
+		else if ((*it).TokenType == QUERY)
+			printf(" type = QUERY");
+		else if ((*it).TokenType == ERROR)
+			printf(" type = %s*ERROR*%s", KMAG, KRESET);
+		if ((*it).EntryParenthesis == true)
+			printf(" - ENTRY P");
+		else if ((*it).ExitParenthesis == true)
+			printf(" - EXIT P");
+		printf(" : [%s %s %s]\n", KYEL, (*it).Value.c_str(), KRESET);
+	}
 }

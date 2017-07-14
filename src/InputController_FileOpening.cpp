@@ -16,9 +16,10 @@ void		InputController::GetInput()
 		throw CustomException(KRED "InputController: Invalid argument\n" KRESET);
 	}
 	_expertSystemDatas->FileString = readFromFile(_argv[1]);
+	std::cout << KGRN "InputController: FILE OPENING SUCCESS" KRESET << std::endl;
 	// debug print;
-	std::cout << KYEL "Opened file (comments cleaned): --------------------" KRESET
-		<< std::endl << _expertSystemDatas->FileString << std::endl;
+	// std::cout << KYEL "Opened file (comments cleaned): --------------------" KRESET
+	// 	<< std::endl << _expertSystemDatas->FileString << std::endl;
 }
 
 /*
@@ -89,7 +90,6 @@ std::string			InputController::readFromFile(std::string path)
 			ret += "\n";
 		}
 		_currentFile.close();
-		std::cout << KGRN "InputController: File opening success" KRESET << std::endl;
 		return (ret);
 	}
 	else

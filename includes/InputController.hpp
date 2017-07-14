@@ -47,6 +47,12 @@ class InputController
 		int						tokenTypeCheck();
 		int						checkTokenPositions();
 		int						checkTokenDuplicates();
+		void					printTokens();
+
+		void					collectFacts();
+		void					printFacts();
+
+		void					collectRules();
 };
 
 #endif
