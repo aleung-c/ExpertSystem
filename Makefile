@@ -17,7 +17,8 @@ CLASS = MainController.cpp \
 		InputController_FileOpening.cpp \
 		InputController_FillValues.cpp \
 		InputController_LexerParser.cpp \
-		InputController_DebugInformation.cpp \
+		InputController_Information.cpp \
+		GameController.cpp \
 		ExceptionsHandler.cpp
 
 SRC_CORE = $(addprefix $(CPP_DIR)/, $(CORE))

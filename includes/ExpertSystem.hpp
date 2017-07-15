@@ -55,6 +55,7 @@
 class							Rule;
 class							Fact;
 class							InputController;
+class							GameController;
 class							MainController;
 
 // ------------------------------------------------------------	//
@@ -106,6 +107,7 @@ typedef struct					s_ExpertSystem
 # include "InputController.hpp"
 # include "ExceptionsHandler.hpp"
 
+# include "GameController.hpp"
 # include "MainController.hpp"
 
 #endif

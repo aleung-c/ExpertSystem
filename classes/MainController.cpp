@@ -1,4 +1,4 @@
-#include "../includes/ExpertSystem.hpp"
+#include "ExpertSystem.hpp"
 
 // ------------------------------------------------------------	//
 //	Constructor / destructor									//
@@ -33,7 +33,13 @@ void	MainController::Run(int argc, char **argv)
 		InputController.GetInput();
 		InputController.LexParse();
 		InputController.FillValues();
+
 		InputController.print();
+		
+		// II. Resolution handling
+		// std::cout << (InputController.getAllFacts()[0]);
+		// Game = GameController("?AB", InputController.getAllFacts());
+		// std::cout << Game;
 	}
 	catch (CustomException &e)
 	{

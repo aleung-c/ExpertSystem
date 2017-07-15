@@ -9,11 +9,16 @@
 **
 */
 
-void		InputController::print(void)
+void						InputController::print(void)
 {
 	for(std::map<char, Fact *>::const_iterator it = _expertSystemDatas->AllFacts.begin();
     	it != _expertSystemDatas->AllFacts.end(); ++it)
 	{
     	std::cout << (*it->second);
 	}
+}
+
+std::map<char, Fact *>		InputController::getAllFacts(void)
+{
+	return (_expertSystemDatas->AllFacts);
 }

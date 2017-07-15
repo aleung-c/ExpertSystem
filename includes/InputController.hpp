@@ -28,7 +28,8 @@ class InputController
 		void					FillValues();
 
 
-		// Debug Information
+		// Information
+		std::map<char, Fact *>	getAllFacts();
 		void					print();
 
 	private:

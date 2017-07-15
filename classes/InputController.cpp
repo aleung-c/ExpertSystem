@@ -60,8 +60,8 @@ void		InputController::Init(t_ExpertSystem *expertSystemDatas, int argc, char **
 // ----->>	See InputController_FillValues.cpp
 
 // ------------------------------------------------------------	//
-//	Debug Information											//
+//	Information													//
 //																//
 // ------------------------------------------------------------	//
 
-// ----->>	See InputController_DebugInformation.cpp
+// ----->>	See InputController_Information.cpp
