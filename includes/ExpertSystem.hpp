@@ -101,11 +101,11 @@ typedef struct					s_ExpertSystem
 **	the LOWEST position, as it will call all the others.
 */
 
-# include "../includes/Rule.hpp"
-# include "../includes/Fact.hpp"
-# include "../includes/InputController.hpp"
-# include "../includes/ExceptionsHandler.hpp"
+# include "Rule.hpp"
+# include "Fact.hpp"
+# include "InputController.hpp"
+# include "ExceptionsHandler.hpp"
 
-# include "../includes/MainController.hpp"
+# include "MainController.hpp"
 
 #endif

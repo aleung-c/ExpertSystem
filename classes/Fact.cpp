@@ -1,31 +1,109 @@
-#include "ExpertSystem.hpp"
+#include "Fact.hpp"
 
-Fact::Fact() : _value(false)
+// STATIC ########################################################
+
+// ###############################################################
+
+// CANONICAL #####################################################
+
+Fact::Fact ( void )
 {
-
+	return ;
 }
 
-Fact::~Fact()
+Fact::Fact ( Fact const & src )
 {
-
+	*this = src;
+	return ;
 }
 
-char			Fact::GetName()
+Fact &				Fact::operator=( Fact const & rhs )
 {
-	return (_name);
+	if (this != &rhs)
+	{
+		this->_name = rhs.GetName();
+		this->_value = rhs.GetValue();
+		this->_AllFacts = rhs.getAllFacts();
+		this->LinkedRules = rhs.LinkedRules;
+	}
+	return (*this);
 }
 
-bool			Fact::GetValue()
+Fact::~Fact ( void )
 {
-	return (_value);
+	return ;
 }
 
-void			Fact::SetName(char n)
+// ###############################################################
+
+// CONSTRUCTOR POLYMORPHISM ######################################
+
+// ###############################################################
+
+// OVERLOAD OPERATOR #############################################
+
+// ###############################################################
+
+// PUBLIC METHOD #################################################
+
+// ###############################################################
+
+// GETTER METHOD #################################################
+
+char					Fact::GetName( void ) const
 {
-	_name = n;
+	return(this->_name);
+}
+bool					Fact::GetValue( void ) const
+{
+	return(this->_value);
+}
+std::vector<Fact *>		Fact::getAllFacts( void ) const
+{
+	return(this->_AllFacts);
 }
 
-void			Fact::SetValue(bool b)
+// ###############################################################
+
+// SETTER METHOD #################################################
+
+void					Fact::SetName(char n)
 {
-	_value = b;
+	this->_name = n;
+	return ;
 }
+void					Fact::SetValue(bool b)
+{
+	this->_value = b;
+	return ;
+}
+
+// ###############################################################
+
+// PRIVATE METHOD ################################################
+
+// ###############################################################
+
+// EXCEPTION METHOD ##############################################
+
+// ###############################################################
+
+// EXTERNAL ######################################################
+
+std::ostream &				operator<<(std::ostream & o, Fact const & i)
+{
+	o << "Fact: " KGRN <<  i.GetName() << KRESET " has base value: " KGRN << std::boolalpha << i.GetValue() << KRESET;
+	if (i.LinkedRules.empty())	
+		o << " with no Rule.";
+	else
+	{
+		o << " with Rule:" KGRN;
+		for(std::vector<Rule>::const_iterator it = i.LinkedRules.begin(); it != i.LinkedRules.end(); ++it)
+			o << " " << it->GetProposition();
+		o << KRESET;
+	}
+	o << std::endl;
+	return (o);
+}
+
+// ###############################################################

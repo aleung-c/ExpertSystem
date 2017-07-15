@@ -38,6 +38,15 @@ void		InputController::Init(t_ExpertSystem *expertSystemDatas, int argc, char **
 	_initialized = true;
 }
 
+void		InputController::print(void) /* ONLY DEBUG PURPOSE, WILL BE REMOVE */
+{
+	for(std::map<char, Fact *>::const_iterator it = _expertSystemDatas->AllFacts.begin();
+    	it != _expertSystemDatas->AllFacts.end(); ++it)
+	{
+    	std::cout << (*it->second);
+	}
+}
+
 // ------------------------------------------------------------	//
 //	File Opening												//
 //																//

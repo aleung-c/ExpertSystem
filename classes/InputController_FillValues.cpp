@@ -1,4 +1,4 @@
-#include "../includes/ExpertSystem.hpp"
+#include "ExpertSystem.hpp"
 
 // ------------------------------------------------------------	//
 //	Data collecting												//
@@ -106,8 +106,9 @@ void	InputController::collectRules()
 		{
 			// we are in a valid rule line.
 			newRule.SetName(line);
-			newRule.GetProposition().assign(line.c_str(), pos);
-			newRule.GetResult().assign(&(line[pos]), line.size() - pos);
+			newRule.SetProposition(line.substr(0 , pos)); // newRule.GetProposition().assign(line.c_str(), pos);  ça convient mieux pour moi, dis moi si ça pose un probleme :)
+			newRule.SetResult(line.c_str() + pos); // newRule.GetResult().assign(&(line[pos]), line.size() - pos);
+			
 			std::cout << KYEL "New Rule: ------------" KRESET << std::endl
 				<< "Name: " << newRule.GetName() << std::endl
 				<< "Proposition: " << newRule.GetProposition() << std::endl

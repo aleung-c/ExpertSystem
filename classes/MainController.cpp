@@ -33,6 +33,7 @@ void	MainController::Run(int argc, char **argv)
 		InputController.GetInput();
 		InputController.LexParse();
 		InputController.FillValues();
+		InputController.print();
 	}
 	catch (CustomException &e)
 	{

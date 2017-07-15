@@ -6,22 +6,29 @@
 class Fact
 {
 	public:
-		Fact();
-		~Fact();
+	
+		Fact( void );
+		Fact( Fact const & src );
+		virtual ~Fact( void );
 
+		Fact &				operator=( Fact const & rhs );
 
-		std::vector<Fact *>		AllFacts;
-		std::vector<Rule>		LinkedRules;
+		char				GetName( void ) const;
+		bool				GetValue( void ) const;
+		std::vector<Fact *>	getAllFacts( void ) const;
 
-		char					GetName();
-		bool					GetValue();
-
-		void					SetName(char n);
-		void					SetValue(bool b);
+		void				SetName(char n);
+		void				SetValue(bool b);
+	
+		std::vector<Rule>	LinkedRules;
 
 	private:
-		char					_name;
-		bool					_value; // default FALSE
+
+		char				_name;
+		bool				_value;
+		std::vector<Fact *>	_AllFacts;
 };
+
+std::ostream &				operator<<(std::ostream & o, Fact const & i);
 
 #endif
