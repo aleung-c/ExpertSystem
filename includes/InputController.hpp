@@ -26,8 +26,10 @@ class InputController
 		void					GetInput();
 		void					LexParse();
 		void					FillValues();
-		
-		void					print(); /* ONLY DEBUG PURPOSE, WILL BE REMOVE */
+
+
+		// Debug Information
+		void					print();
 
 	private:
 		bool					_initialized;
