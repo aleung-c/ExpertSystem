@@ -1,4 +1,5 @@
 #include "ExpertSystem.hpp"
+#include "GameController.hpp"
 
 // STATIC ########################################################
 
@@ -36,7 +37,7 @@ GameController::~GameController ( void )
 
 // CONSTRUCTOR POLYMORPHISM ######################################
 
-GameController::GameController ( std::string query, std::map<char, Fact *> allFacts ) : _query(query), _allFacts(allFacts)
+GameController::GameController ( std::string query, mapFacts allFacts ) : _query(query), _allFacts(allFacts)
 {
 	return ;
 }
@@ -57,7 +58,7 @@ std::string				GameController::getQuery( void ) const
 {
 	return(this->_query);
 }
-std::map<char, Fact *>	GameController::getAllFacts( void ) const
+const mapFacts &		GameController::getAllFacts( void ) const
 {
 	return(this->_allFacts);
 }
@@ -80,14 +81,13 @@ std::map<char, Fact *>	GameController::getAllFacts( void ) const
 
 std::ostream &				operator<<(std::ostream & o, GameController const & i)
 {
-	o << KYEL "In GameController ------------" KRESET << std::endl;
+	o << KYEL "In GameController: ------------" KRESET << std::endl;
 	o << "Query: " KGRN << i.getQuery() << std::endl << KRESET "Facts:" << std::endl;
-	o << i.getAllFacts()[0];
-	// for(std::map<char, Fact *>::const_iterator it = i.getAllFacts().begin();
- //    	it != i.getAllFacts().end(); ++it)
-	// {
- //    	o << (*it->second);
-	// }
+	for(mapFacts::const_iterator it = i.getAllFacts().begin();
+    	it != i.getAllFacts().end(); ++it)
+	{
+    	o << "\t" << (*it->second);
+	}
 	return (o);
 }
 

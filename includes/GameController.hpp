@@ -30,12 +30,12 @@ class GameController
 	
 
 		std::string				getQuery( void ) const;
-		std::map<char, Fact *>	getAllFacts( void ) const;
+		const mapFacts &		getAllFacts( void ) const;
 
 	private:
 
 		std::string				_query;
-		std::map<char, Fact *>	_allFacts;
+		mapFacts				_allFacts;
 };
 
 std::ostream &				operator<<(std::ostream & o, GameController const & i);

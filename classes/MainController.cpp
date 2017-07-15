@@ -34,12 +34,12 @@ void	MainController::Run(int argc, char **argv)
 		InputController.LexParse();
 		InputController.FillValues();
 
+		std::cout << KYEL "After Input: ------------" KRESET << std::endl;
 		InputController.print();
 		
 		// II. Resolution handling
-		// std::cout << (InputController.getAllFacts()[0]);
-		// Game = GameController("?AB", InputController.getAllFacts());
-		// std::cout << Game;
+		Game = GameController("?AB", InputController.getAllFacts()); // first arg is the query needed
+		std::cout << Game;
 	}
 	catch (CustomException &e)
 	{
