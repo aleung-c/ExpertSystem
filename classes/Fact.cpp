@@ -1,4 +1,4 @@
-#include "../includes/ExpertSystem.hpp"
+#include "ExpertSystem.hpp"
 
 Fact::Fact() : _value(false)
 {
