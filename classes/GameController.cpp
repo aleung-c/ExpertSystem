@@ -98,7 +98,7 @@ std::ostream &				operator<<(std::ostream & o, GameController const & i)
   //   	{
   //   		b = (*it->second);
   //   	}
-  //   	o << "\t" << (*it->second);
+    	o << "\t" << (*it->second);
 	}
 	// o << "Operation (a + b)     : " << (a + b) << std::endl;
 	// o << "Operation (a | b)     : " << (a | b) << std::endl;

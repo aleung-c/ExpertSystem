@@ -21,7 +21,7 @@ class Rule
 	
 		// Setter
 		void			SetName(std::string name);
-		void			SetPoloneseInversed(std::string str);
+		void			SetPoloneseInversed( void );
 		void			SetProposition(std::string str);
 		void			SetResult(std::string str);
 
@@ -31,7 +31,7 @@ class Rule
 	private:
 
 		std::string		_strtrim(std::string str); // right trim called in setter Proposition/Result
-
+		std::string		_convertToNPI(std::string str); // Algorithme Shunting-yard basic
 
 		std::string		_name;
 		std::string		_poloneseInversed;

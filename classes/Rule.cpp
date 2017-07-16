@@ -1,4 +1,5 @@
 #include "Rule.hpp"
+#include <stack>
 
 // STATIC ########################################################
 
@@ -81,14 +82,15 @@ void				Rule::SetName(std::string name)
 	this->_name = name;
 	return ;
 }
-void				Rule::SetPoloneseInversed(std::string str)
+void				Rule::SetPoloneseInversed(void)
 {
-	this->_poloneseInversed = str;
+	this->_poloneseInversed = this->_convertToNPI(this->_proposition);
 	return ;
 }
 void				Rule::SetProposition(std::string str)
 {
 	this->_proposition = this->_strtrim(str);
+	this->SetPoloneseInversed();
 	return ;
 }
 void				Rule::SetResult(std::string str)
@@ -105,6 +107,36 @@ std::string			Rule::_strtrim(std::string str)
 {
 	str.erase(str.find_last_not_of(" \n\r\t") + 1);
 	return (str);
+}
+
+/*
+**  Proposition
+**  Must be formated like "!C ^ ( ( B + A ) + ( C | D ) )"
+**  spaces are important
+*/
+
+std::string			Rule::_convertToNPI(std::string str)
+{
+	std::string				NPI;
+	std::string				out;
+	std::stringstream		tmpstr(str);
+	std::stack<std::string>	operators;
+
+	while (tmpstr >> out)
+	{
+		if (std::strstr("|^+", out.c_str()))
+			operators.push(out);
+		else if (std::strstr("(", out.c_str()))
+			;
+		else if (std::strstr(")", out.c_str()))
+		{
+			NPI += operators.top() + " ";
+			operators.pop();
+		}
+		else
+			NPI += (out + " ");
+	}
+	return (this->_strtrim(NPI));
 }
 
 // ###############################################################
