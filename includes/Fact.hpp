@@ -15,10 +15,11 @@ class Fact
 
 		char				GetName( void ) const;
 		bool				GetValue( void ) const;
-		std::vector<Fact *>	getAllFacts( void ) const;
+		mapFacts			getAllFacts( void ) const;
 
 		void				SetName(char n);
 		void				SetValue(bool b);
+		void				SetAllFacts(mapFacts f);
 	
 		std::vector<Rule>	LinkedRules;
 
@@ -37,7 +38,7 @@ class Fact
 
 		char				_name;
 		bool				_value;
-		std::vector<Fact *>	_AllFacts;
+		mapFacts			_AllFacts;
 };
 
 std::ostream &				operator<<(std::ostream & o, Fact const & i);

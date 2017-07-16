@@ -26,6 +26,7 @@ class InputController
 		void					GetInput();
 		void					LexParse();
 		void					FillValues();
+		void					fillFactsWithMap();
 
 
 		// Information

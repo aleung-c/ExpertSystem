@@ -1,4 +1,4 @@
-#include "../includes/ExpertSystem.hpp"
+#include "ExpertSystem.hpp"
 
 int		main(int argc, char **argv)
 {

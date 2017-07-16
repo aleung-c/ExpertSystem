@@ -32,6 +32,8 @@ class GameController
 		std::string				getQuery( void ) const;
 		const mapFacts &		getAllFacts( void ) const;
 
+		void					run( void );
+
 	private:
 
 		std::string				_query;

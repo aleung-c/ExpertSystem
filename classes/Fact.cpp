@@ -81,11 +81,16 @@ bool					Fact::operator!( void )
 
 // PUBLIC METHOD #################################################
 
-bool					Fact::GetValueRules( void ) const /* WIP */
+bool					Fact::GetValueRules( void ) const
 {
-	if (this->_value)
-		return (true);
-	return(this->_value);
+	if (this->_value || this->LinkedRules.empty())
+		return (this->_value);
+
+	for(std::vector<Rule>::const_iterator it = this->LinkedRules.begin(); it != this->LinkedRules.end(); ++it)
+		if (it->IsCheck(this->_AllFacts))
+			return (true);
+
+	return(false);
 }
 
 // ###############################################################
@@ -100,7 +105,7 @@ bool					Fact::GetValue( void ) const
 {
 	return(this->_value);
 }
-std::vector<Fact *>		Fact::getAllFacts( void ) const
+mapFacts				Fact::getAllFacts( void ) const
 {
 	return(this->_AllFacts);
 }
@@ -117,6 +122,11 @@ void					Fact::SetName(char n)
 void					Fact::SetValue(bool b)
 {
 	this->_value = b;
+	return ;
+}
+void					Fact::SetAllFacts(mapFacts f)
+{
+	this->_AllFacts = f;
 	return ;
 }
 

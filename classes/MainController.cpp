@@ -38,9 +38,9 @@ void	MainController::Run(int argc, char **argv)
 		InputController.print();
 		
 		// II. Resolution handling
-		Game = GameController("?AB", InputController.getAllFacts()); // first arg is the query needed
-		std::cout << Game;
-
+		Game = GameController("?CDE", InputController.getAllFacts());	// first arg is the query needed
+		std::cout << Game;												// Once the query, the = and the Proposition (see Rule.cpp l.150) are stored correctly 
+		// Game.run();													// you can uncomment the RUN ()
 	}
 	catch (CustomException &e)
 	{

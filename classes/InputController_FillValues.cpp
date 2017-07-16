@@ -61,6 +61,21 @@ void		InputController::collectFacts()
 			}
 		}
 	}
+	this->fillFactsWithMap();
+}
+
+/*
+**  Fill All Facts with map completed.
+*/
+
+void		InputController::fillFactsWithMap( void )
+{
+	for (std::map<char, Fact *>::iterator it = _expertSystemDatas->AllFacts.begin();
+			it != _expertSystemDatas->AllFacts.end();
+			++it)
+	{
+		it->second->SetAllFacts(this->_expertSystemDatas->AllFacts);
+	}
 }
 
 /*

@@ -3,6 +3,11 @@
 
 # include "ExpertSystem.hpp"
 
+struct Value {
+    bool b;
+    std::string s;
+};
+
 class Rule
 {
 	public:
@@ -26,17 +31,20 @@ class Rule
 		void			SetResult(std::string str);
 
 		// For algorythme
-		bool			IsCheck( void );
+		bool			IsCheck( mapFacts list  ) const;
 
 	private:
 
-		std::string		_strtrim(std::string str); // right trim called in setter Proposition/Result
-		std::string		_convertToNPI(std::string str); // Algorithme Shunting-yard basic
+		std::string		_strtrim(std::string str); /* right trim called in setter Proposition/Result */
+		std::string		_convertToNPI(std::string str); /* Algorithme Shunting-yard basic */
+		bool			_chooseOperator(mapFacts list, Value one, Value two, char op) const;
+		bool			_factOrRevFact(mapFacts list, Value val) const;
 
 		std::string		_name;
 		std::string		_poloneseInversed;
 		std::string		_proposition;
 		std::string		_result;
 };
+
 
 #endif

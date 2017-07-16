@@ -47,9 +47,39 @@ Rule::~Rule ( void )
 
 // PUBLIC METHOD #################################################
 
-bool				Rule::IsCheck( void )
+bool				Rule::IsCheck( mapFacts list ) const
 {
-	return (false);
+	std::string				out;
+	std::stringstream		tmpstr(this->_poloneseInversed);
+	std::stack<Value>		facts;
+	Value					one;
+	Value					two;
+	Value					val;
+
+	while (tmpstr >> out)
+	{
+		if (std::strstr("|^+", out.c_str()))
+		{
+			two = facts.top();
+			facts.pop();
+			one = facts.top();
+			facts.pop();
+			val.b = this->_chooseOperator(list, one, two, out.c_str()[0]);
+			facts.push(val);
+		}
+		else
+		{
+			val.s = std::string(out);
+			facts.push(val);
+			val.s.clear();
+		}
+	}
+	if (facts.empty() || facts.top().s.empty())
+		return (facts.top().b);
+	
+	// In case we have a rule without operator
+	one = facts.top();
+	return (this->_factOrRevFact(list, one));
 }
 
 // ###############################################################
@@ -136,7 +166,37 @@ std::string			Rule::_convertToNPI(std::string str)
 		else
 			NPI += (out + " ");
 	}
+	while (!operators.empty())
+	{
+		NPI += operators.top() + " ";
+		operators.pop();
+	}
 	return (this->_strtrim(NPI));
+}
+
+/*
+**  Solver
+*/
+
+bool			Rule::_chooseOperator(mapFacts list, Value one, Value two, char op) const
+{
+	if (op == '|')
+		return (this->_factOrRevFact(list, one) || this->_factOrRevFact(list, two));
+	else if (op == '+')
+		return (this->_factOrRevFact(list, one) && this->_factOrRevFact(list, two));
+	return (this->_factOrRevFact(list, one) ^ this->_factOrRevFact(list, two));
+}
+
+
+/*
+**  For !Fact ( like !A)
+*/
+
+bool			Rule::_factOrRevFact(mapFacts list, Value val) const
+{
+	if (val.s.empty())
+		return (val.b);
+	return ((val.s[0] == '!') ? !list[val.s[1]]->GetValueRules() : list[val.s[0]]->GetValueRules());
 }
 
 // ###############################################################

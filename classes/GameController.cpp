@@ -50,6 +50,15 @@ GameController::GameController ( std::string query, mapFacts allFacts ) : _query
 
 // PUBLIC METHOD #################################################
 
+void					GameController::run( void )
+{
+	for ( size_t i = 0 ; i < this->_query.length(); i++)
+	{
+		if (this->_query[i] != '?')
+			std::cout << "Query for fact " << this->_query[i] << " is " << (this->_allFacts[this->_query[i]])->GetValueRules() << std::endl;
+	}
+}
+
 // ###############################################################
 
 // GETTER METHOD #################################################
@@ -81,9 +90,10 @@ const mapFacts &		GameController::getAllFacts( void ) const
 
 std::ostream &				operator<<(std::ostream & o, GameController const & i)
 {
-	// Fact a;
-	// Fact b;
-	
+	Fact a;
+	Fact b;
+	// int c = 0;
+
 	o << KYEL "In GameController: ------------" KRESET << std::endl;
 	o << "Query: " KGRN << i.getQuery() << std::endl << KRESET "Facts:" << std::endl;
 	for(mapFacts::const_iterator it = i.getAllFacts().begin();
@@ -93,24 +103,16 @@ std::ostream &				operator<<(std::ostream & o, GameController const & i)
   //   	{
   //   		(*it->second).SetValue(true);
   //   		a = (*it->second);
+  //   		c = 0;
   //   	}
-  //   	else
+  //   	else if (!c)
   //   	{
+  //   		(*it->second).SetValue(true);
   //   		b = (*it->second);
+  //   		c++;
   //   	}
     	o << "\t" << (*it->second);
 	}
-	// o << "Operation (a + b)     : " << (a + b) << std::endl;
-	// o << "Operation (a | b)     : " << (a | b) << std::endl;
-	// o << "Operation (a ^ b)     : " << (a ^ b) << std::endl;
-	// o << "Operation (a ^ true)  : " << (a ^ true) << std::endl;
-	// o << "Operation (b + false) : " << (b + false) << std::endl;
-	// o << "Operation (b | true)  : " << (b | true) << std::endl;
-	// o << "Operation (true ^ a)  : " << (true ^ a) << std::endl;
-	// o << "Operation (true + a)  : " << (true + a) << std::endl;
-	// o << "Operation (true | b)  : " << (true | b) << std::endl;
-	// o << "Operation (!a)        : " << (!a) << std::endl;
-	// o << "Operation (!b)        : " << (!b) << std::endl;
 	return (o);
 }
 
