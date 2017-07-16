@@ -22,6 +22,13 @@ class Fact
 	
 		std::vector<Rule>	LinkedRules;
 
+		// overload operator for easier algo
+		bool				operator+( Fact const & rhs );
+		bool				operator|( Fact const & rhs );
+		bool				operator^( Fact const & rhs );
+		bool				operator+( bool ean );
+		bool				operator|( bool ean );
+		bool				operator^( bool ean );
 	private:
 
 		char				_name;
@@ -30,5 +37,7 @@ class Fact
 };
 
 std::ostream &				operator<<(std::ostream & o, Fact const & i);
-
+bool						operator+(bool ean, Fact const & rhs );
+bool						operator|(bool ean, Fact const & rhs );
+bool						operator^(bool ean, Fact const & rhs );
 #endif

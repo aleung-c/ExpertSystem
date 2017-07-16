@@ -40,6 +40,7 @@ void	MainController::Run(int argc, char **argv)
 		// II. Resolution handling
 		Game = GameController("?AB", InputController.getAllFacts()); // first arg is the query needed
 		std::cout << Game;
+
 	}
 	catch (CustomException &e)
 	{

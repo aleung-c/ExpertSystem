@@ -42,6 +42,36 @@ Fact::~Fact ( void )
 
 // OVERLOAD OPERATOR #############################################
 
+bool					Fact::operator+( Fact const & rhs )
+{
+	return ((this->_value && rhs.GetValue()));
+}
+
+bool					Fact::operator|( Fact const & rhs )
+{
+	return ((this->_value || rhs.GetValue()));
+}
+
+bool					Fact::operator^( Fact const & rhs )
+{
+	return ((this->_value ^ rhs.GetValue()));
+}
+
+bool					Fact::operator+( bool ean )
+{
+	return ((this->_value && ean));
+}
+
+bool					Fact::operator|( bool ean )
+{
+	return ((this->_value || ean));
+}
+
+bool					Fact::operator^( bool ean )
+{
+	return ((this->_value ^ ean));
+}
+
 // ###############################################################
 
 // PUBLIC METHOD #################################################
@@ -104,6 +134,21 @@ std::ostream &				operator<<(std::ostream & o, Fact const & i)
 	}
 	o << std::endl;
 	return (o);
+}
+
+bool						operator+( bool ean, Fact const & rhs  )
+{
+	return ((ean && rhs.GetValue()));
+}
+
+bool						operator|( bool ean, Fact const & rhs  )
+{
+	return ((ean || rhs.GetValue()));
+}
+
+bool						operator^( bool ean, Fact const & rhs  )
+{
+	return ((ean ^ rhs.GetValue()));
 }
 
 // ###############################################################
