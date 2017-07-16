@@ -44,37 +44,49 @@ Fact::~Fact ( void )
 
 bool					Fact::operator+( Fact const & rhs )
 {
-	return ((this->_value && rhs.GetValue()));
+	return ((this->GetValueRules() && rhs.GetValueRules()));
 }
 
 bool					Fact::operator|( Fact const & rhs )
 {
-	return ((this->_value || rhs.GetValue()));
+	return ((this->GetValueRules() || rhs.GetValueRules()));
 }
 
 bool					Fact::operator^( Fact const & rhs )
 {
-	return ((this->_value ^ rhs.GetValue()));
+	return ((this->GetValueRules() ^ rhs.GetValueRules()));
 }
 
 bool					Fact::operator+( bool ean )
 {
-	return ((this->_value && ean));
+	return ((this->GetValueRules() && ean));
 }
 
 bool					Fact::operator|( bool ean )
 {
-	return ((this->_value || ean));
+	return ((this->GetValueRules() || ean));
 }
 
 bool					Fact::operator^( bool ean )
 {
-	return ((this->_value ^ ean));
+	return ((this->GetValueRules() ^ ean));
+}
+
+bool					Fact::operator!( void )
+{
+	return (!(this->GetValueRules()));
 }
 
 // ###############################################################
 
 // PUBLIC METHOD #################################################
+
+bool					Fact::GetValueRules( void ) const /* WIP */
+{
+	if (this->_value)
+		return (true);
+	return(this->_value);
+}
 
 // ###############################################################
 
@@ -138,17 +150,17 @@ std::ostream &				operator<<(std::ostream & o, Fact const & i)
 
 bool						operator+( bool ean, Fact const & rhs  )
 {
-	return ((ean && rhs.GetValue()));
+	return ((ean && rhs.GetValueRules()));
 }
 
 bool						operator|( bool ean, Fact const & rhs  )
 {
-	return ((ean || rhs.GetValue()));
+	return ((ean || rhs.GetValueRules()));
 }
 
 bool						operator^( bool ean, Fact const & rhs  )
 {
-	return ((ean ^ rhs.GetValue()));
+	return ((ean ^ rhs.GetValueRules()));
 }
 
 // ###############################################################

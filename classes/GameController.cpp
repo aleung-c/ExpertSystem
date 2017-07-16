@@ -98,7 +98,7 @@ std::ostream &				operator<<(std::ostream & o, GameController const & i)
   //   	{
   //   		b = (*it->second);
   //   	}
-    	o << "\t" << (*it->second);
+  //   	o << "\t" << (*it->second);
 	}
 	// o << "Operation (a + b)     : " << (a + b) << std::endl;
 	// o << "Operation (a | b)     : " << (a | b) << std::endl;
@@ -109,6 +109,8 @@ std::ostream &				operator<<(std::ostream & o, GameController const & i)
 	// o << "Operation (true ^ a)  : " << (true ^ a) << std::endl;
 	// o << "Operation (true + a)  : " << (true + a) << std::endl;
 	// o << "Operation (true | b)  : " << (true | b) << std::endl;
+	// o << "Operation (!a)        : " << (!a) << std::endl;
+	// o << "Operation (!b)        : " << (!b) << std::endl;
 	return (o);
 }
 
