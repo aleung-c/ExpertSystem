@@ -97,6 +97,7 @@ typedef struct					s_token
 typedef struct					s_ExpertSystem
 {
 	std::string					FileString;
+	std::string					CurQuery;
 
 	std::map<char, Fact *>		AllFacts;
 }								t_ExpertSystem;

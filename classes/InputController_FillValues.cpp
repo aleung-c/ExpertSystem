@@ -20,9 +20,10 @@ void		InputController::FillValues()
 	else
 	{
 		collectFacts();
+		setInitFacts();
 		printFacts(); //
 		collectRules();
-		
+		collectQuery();
 	}
 }
 
@@ -37,6 +38,7 @@ void		InputController::collectFacts()
 	Fact							*newFact;
 	std::smatch						matches;
 	char							factChar;
+	std::string						specialLineStr;
 
 
 	for (std::list<t_token>::iterator it = _tokenList.begin();
@@ -45,7 +47,6 @@ void		InputController::collectFacts()
 	{
 		if ((*it).TokenType == FACT)
 		{
-			newFact = new Fact();
 			if (std::regex_match((*it).Value, matches,
 				std::regex("^!?\\(?([A-Z])\\)?$")))
 			{
@@ -54,14 +55,62 @@ void		InputController::collectFacts()
 				if (_expertSystemDatas->AllFacts.find(factChar)
 						== _expertSystemDatas->AllFacts.end())
 				{
+					newFact = new Fact();
 					newFact->SetName(factChar);
 					newFact->SetValue(false);
 					_expertSystemDatas->AllFacts[factChar] = newFact;
 				}
 			}
 		}
+		// parse init facts and query line for unruled facts.
+		if ((*it).TokenType == INIT_FACTS || (*it).TokenType == QUERY)
+		{
+			specialLineStr = (*it).Value;
+			for (int i = 0; specialLineStr[i]; i++)
+			{
+				if (specialLineStr[i] >= 'A' && specialLineStr[i] <= 'Z')
+				{
+					factChar = specialLineStr[i];
+					if (_expertSystemDatas->AllFacts.find(factChar)
+						== _expertSystemDatas->AllFacts.end())
+					{
+						newFact = new Fact();
+						newFact->SetName(factChar);
+						newFact->SetValue(false); // no matter the value. init must NOT be done here, as
+												  // we would miss the initialized existing facts.
+						_expertSystemDatas->AllFacts[factChar] = newFact;
+					}
+				}
+			}
+		}
 	}
 	this->fillFactsWithMap();
+}
+
+/*
+**	Parse the "=" line and set the fact initial values.
+*/
+
+void		InputController::setInitFacts()
+{
+	std::string		initFactsLine;
+
+	for (std::list<t_token>::iterator it = _tokenList.begin();
+			it != _tokenList.end();
+			it++)
+	{
+		if ((*it).TokenType == INIT_FACTS)
+		{
+			initFactsLine = (*it).Value;
+			for (int i = 0; initFactsLine[i]; i++)
+			{
+				if (initFactsLine[i] >= 'A' && initFactsLine[i] <= 'Z')
+				{
+					this->_expertSystemDatas->AllFacts[initFactsLine[i]]->SetValue(true);
+				}
+			}
+		}
+	}
 }
 
 /*
@@ -141,6 +190,23 @@ void	InputController::collectRules()
 				}
 				i++;
 			}
+		}
+	}
+}
+
+/*
+**	Stock the token with the whole query line into the global struct.
+*/
+
+void		InputController::collectQuery()
+{
+	for (std::list<t_token>::iterator it = _tokenList.begin();
+			it != _tokenList.end();
+			it++)
+	{
+		if ((*it).TokenType == QUERY)
+		{
+			this->_expertSystemDatas->CurQuery = (*it).Value;
 		}
 	}
 }

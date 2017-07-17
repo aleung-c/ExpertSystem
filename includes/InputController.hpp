@@ -56,9 +56,12 @@ class InputController
 		void					printTokens();
 
 		void					collectFacts();
+		void					setInitFacts();
 		void					printFacts();
 
 		void					collectRules();
+
+		void					collectQuery();
 };
 
 #endif

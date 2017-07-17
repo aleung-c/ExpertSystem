@@ -90,27 +90,12 @@ const mapFacts &		GameController::getAllFacts( void ) const
 
 std::ostream &				operator<<(std::ostream & o, GameController const & i)
 {
-	Fact a;
-	Fact b;
-	// int c = 0;
 
 	o << KYEL "In GameController: ------------" KRESET << std::endl;
 	o << "Query: " KGRN << i.getQuery() << std::endl << KRESET "Facts:" << std::endl;
 	for(mapFacts::const_iterator it = i.getAllFacts().begin();
     	it != i.getAllFacts().end(); ++it)
 	{
-		// if (it == i.getAllFacts().begin())
-  //   	{
-  //   		(*it->second).SetValue(true);
-  //   		a = (*it->second);
-  //   		c = 0;
-  //   	}
-  //   	else if (!c)
-  //   	{
-  //   		(*it->second).SetValue(true);
-  //   		b = (*it->second);
-  //   		c++;
-  //   	}
     	o << "\t" << (*it->second);
 	}
 	return (o);
