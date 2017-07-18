@@ -94,12 +94,20 @@ typedef struct					s_token
 	bool						ExitParenthesis;
 }								t_token;
 
+typedef struct					s_ExpSysFile
+{
+	std::string					Path;
+	std::string					Str;
+	std::string					Query;
+	std::map<char, Fact *>		AllFacts;
+	std::list<t_token>			TokenList;
+}								t_ExpSysFile;
+
 typedef struct					s_ExpertSystem
 {
-	std::string					FileString;
-	std::string					CurQuery;
-
-	std::map<char, Fact *>		AllFacts;
+	bool						Verbose;
+	std::vector<t_ExpSysFile>	Files;
+	
 }								t_ExpertSystem;
 
 

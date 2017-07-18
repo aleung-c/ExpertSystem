@@ -31,16 +31,24 @@ void	MainController::Run(int argc, char **argv)
 		// I. Input handling
 		InputController.Init(ExpertSystemDatas, argc, argv);
 		InputController.GetInput();
-		InputController.LexParse();
-		InputController.FillValues();
+		for (std::vector<t_ExpSysFile>::iterator it = ExpertSystemDatas->Files.begin();
+			it != ExpertSystemDatas->Files.end(); it++)
+		{
+			std::cout << std::endl << KCYN "------------------------------------------- " KRESET << std::endl;
+			std::cout << KCYN "  File: " << (*it).Path << std::endl;
+			std::cout << KCYN "------------------------------------------- " KRESET << std::endl;
+			InputController.print(*it);
+			InputController.LexParse(*it);
+			InputController.FillValues(*it);
 
-		std::cout << KYEL "After Input: ------------" KRESET << std::endl;
-		InputController.print();
+			std::cout << KYEL "After Input: ------------" KRESET << std::endl;
+			InputController.print(*it);
 		
-		// II. Resolution handling
-		Game = GameController(ExpertSystemDatas->CurQuery, InputController.getAllFacts());	// first arg is the query needed
-		std::cout << Game;												// Once the query, the = and the Proposition (see Rule.cpp l.150) are stored correctly 
-		Game.run();													// you can uncomment the RUN ()
+			// II. Resolution handling
+			Game = GameController((*it).Query, InputController.getAllFacts(*it), ExpertSystemDatas->Verbose);	// first arg is the query needed
+			std::cout << Game;												// Once the query, the = and the Proposition (see Rule.cpp l.150) are stored correctly 
+			Game.run();													// you can uncomment the RUN ()
+		}
 	}
 	catch (CustomException &e)
 	{

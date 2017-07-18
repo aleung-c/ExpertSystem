@@ -9,7 +9,7 @@
 **	We will now lex this file in token, and parse those tokens.
 */
 
-void		InputController::LexParse()
+void		InputController::LexParse(t_ExpSysFile &file)
 {
 	if (!_initialized)
 	{
@@ -19,18 +19,18 @@ void		InputController::LexParse()
 	else
 	{
 		// STEP 1: cut the file in tokens
-		lexInput();
+		lexInput(file);
 		// STEP 2: parse those token to give them a type.
-		parseTokenTypes();
+		parseTokenTypes(file);
 		//printTokens(); // debug print;
 		// STEP 3 : are any of these token type invalid?
-		if (tokenTypeCheck() != 0)
+		if (tokenTypeCheck(file) != 0)
 			throw CustomException(KRED "InputController: Parser: invalid token." KRESET);
 		// STEP 4 : are they correctly positionned in their lines?
-		if (checkTokenPositions() != 0)
+		if (checkTokenPositions(file) != 0)
 			throw CustomException(KRED "InputController: Parser: invalid token position." KRESET);
 		// STEP % : are there forbidden duplicates?
-		if (checkTokenDuplicates() != 0)
+		if (checkTokenDuplicates(file) != 0)
 			throw CustomException(KRED "InputController: Parser: missing or duplicate token." KRESET);
 		std::cout << KGRN "InputController: PARSING SUCCESS" KRESET << std::endl;
 	}
@@ -42,10 +42,10 @@ void		InputController::LexParse()
 **	We will also get the positions of those tokens.
 */
 
-void				InputController::lexInput()
+void				InputController::lexInput(t_ExpSysFile &file)
 {
 	std::string				line;
-	std::stringstream		progStream(_expertSystemDatas->FileString);
+	std::stringstream		progStream(file.Str);
 	char 					*splittedString;
 	int						lineNumber;
 	int						numberInLine;
@@ -61,7 +61,7 @@ void				InputController::lexInput()
 			curToken.Value = splittedString;
 			curToken.LineNumber = lineNumber;
 			curToken.NumberInLine = numberInLine;
-			_tokenList.push_back(curToken);
+			file.TokenList.push_back(curToken);
 			numberInLine += 1;
 		}
 		lineNumber += 1;
@@ -75,9 +75,9 @@ void				InputController::lexInput()
 **	authorized types of symbols and values. -> semantical check.
 */
 
-void		InputController::parseTokenTypes()
+void		InputController::parseTokenTypes(t_ExpSysFile &file)
 {
-	for (std::list<t_token>::iterator it = _tokenList.begin(); it != _tokenList.end() ; it++)
+	for (std::list<t_token>::iterator it = file.TokenList.begin(); it != file.TokenList.end() ; it++)
 	{
 		(*it).ExitParenthesis = false;
 		(*it).EntryParenthesis = false;
@@ -116,11 +116,11 @@ void		InputController::parseTokenTypes()
 **	if some of these token are ERROR, we stop here.
 */
 
-int					InputController::tokenTypeCheck()
+int					InputController::tokenTypeCheck(t_ExpSysFile &file)
 {
 	int		nbOfErrors = 0;
 
-	for(std::list<t_token>::iterator it = _tokenList.begin(); it != _tokenList.end() ; it++)
+	for(std::list<t_token>::iterator it = file.TokenList.begin(); it != file.TokenList.end() ; it++)
 	{
 		if ((*it).TokenType == ERROR)
 		{
@@ -142,12 +142,12 @@ int					InputController::tokenTypeCheck()
 **	For example, we cannot have an symbol at the start of a line.
 */
 
-int				InputController::checkTokenPositions()
+int				InputController::checkTokenPositions(t_ExpSysFile &file)
 {
 	int								nbOfErrors = 0;
 	std::list<t_token>::iterator	next;
 
-	for (std::list<t_token>::iterator it = _tokenList.begin(); it != _tokenList.end() ; it++)
+	for (std::list<t_token>::iterator it = file.TokenList.begin(); it != file.TokenList.end() ; it++)
 	{
 		// next = it++;
 		next = it;
@@ -163,8 +163,8 @@ int				InputController::checkTokenPositions()
 		}
 		// check for solo SYMBOL on end of line.
 		if ((*it).TokenType == SYMBOL
-			&& ((next != _tokenList.end() && (*it).LineNumber != (*next).LineNumber)
-			|| next == _tokenList.end()))
+			&& ((next != file.TokenList.end() && (*it).LineNumber != (*next).LineNumber)
+			|| next == file.TokenList.end()))
 		{
 			nbOfErrors += 1;
 			std::cout << KRED "Line " << (*it).LineNumber << " col "
@@ -172,7 +172,7 @@ int				InputController::checkTokenPositions()
 			<< (*it).Value << "\"" KRESET << std::endl;
 		}
 		// check for two SYMBOLs following each other
-		if ((*it).TokenType == SYMBOL && next != _tokenList.end()
+		if ((*it).TokenType == SYMBOL && next != file.TokenList.end()
 			&& (*it).LineNumber == (*next).LineNumber
 			&& (*next).TokenType == (*it).TokenType)
 		{
@@ -183,7 +183,7 @@ int				InputController::checkTokenPositions()
 		}
 		// ------ FACT position check;
 		// check for two consecutive facts in rule.
-		if ((*it).TokenType == FACT && next != _tokenList.end()
+		if ((*it).TokenType == FACT && next != file.TokenList.end()
 			&& (*it).LineNumber == (*next).LineNumber
 			&& (*next).TokenType == (*it).TokenType)
 		{
@@ -204,14 +204,14 @@ int				InputController::checkTokenPositions()
 **	There can only be one line of INIT_FACTS, and one line of QUERY.
 */
 
-int			InputController::checkTokenDuplicates()
+int			InputController::checkTokenDuplicates(t_ExpSysFile &file)
 {
 	int								nbOfErrors = 0;
 	int								nbInitFacts = 0;
 	int								nbQueries = 0;
 	std::list<t_token>::iterator	next;
 
-	for (std::list<t_token>::iterator it = _tokenList.begin(); it != _tokenList.end() ; it++)
+	for (std::list<t_token>::iterator it = file.TokenList.begin(); it != file.TokenList.end() ; it++)
 	{
 		if ((*it).TokenType == INIT_FACTS)
 		{
@@ -245,10 +245,10 @@ int			InputController::checkTokenDuplicates()
 	return (0); // All green;
 }
 
-void		InputController::printTokens()
+void		InputController::printTokens(t_ExpSysFile &file)
 {
 	printf(KYEL "Tokenized file: --------------------------%s\n", KRESET);
-	for(std::list<t_token>::iterator it = _tokenList.begin(); it != _tokenList.end() ; it++)
+	for(std::list<t_token>::iterator it = file.TokenList.begin(); it != file.TokenList.end() ; it++)
 	{
 		printf("token : line %d col %d -", (*it).LineNumber,(*it).NumberInLine);
 		if ((*it).TokenType == FACT)

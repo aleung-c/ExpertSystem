@@ -18,7 +18,7 @@ GameController::GameController ( GameController const & src )
 	return ;
 }
 
-GameController &				GameController::operator=( GameController const & rhs )
+GameController &		GameController::operator=( GameController const & rhs )
 {
 	if (this != &rhs)
 	{
@@ -37,8 +37,10 @@ GameController::~GameController ( void )
 
 // CONSTRUCTOR POLYMORPHISM ######################################
 
-GameController::GameController ( std::string query, mapFacts allFacts ) : _query(query), _allFacts(allFacts)
+GameController::GameController ( std::string query, mapFacts allFacts, bool verbose )
+:_verbose(verbose), _query(query), _allFacts(allFacts)
 {
+	(void)_verbose;
 	return ;
 }
 
@@ -55,7 +57,9 @@ void					GameController::run( void )
 	for ( size_t i = 0 ; i < this->_query.length(); i++)
 	{
 		if (this->_query[i] != '?')
-			std::cout << "Query for fact " << this->_query[i] << " is " << (this->_allFacts[this->_query[i]])->GetValueRules() << std::endl;
+			std::cout << "Query for fact " << this->_query[i]
+						<< " is " << (this->_allFacts[this->_query[i]])->GetValueRules()
+						<< std::endl;
 	}
 }
 
@@ -88,7 +92,7 @@ const mapFacts &		GameController::getAllFacts( void ) const
 
 // EXTERNAL ######################################################
 
-std::ostream &				operator<<(std::ostream & o, GameController const & i)
+std::ostream &			operator<<(std::ostream & o, GameController const & i)
 {
 
 	o << KYEL "In GameController: ------------" KRESET << std::endl;

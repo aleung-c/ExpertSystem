@@ -10,7 +10,7 @@
 **	of the processing.
 */
 
-void		InputController::FillValues()
+void		InputController::FillValues(t_ExpSysFile &file)
 {
 	if (!_initialized)
 	{
@@ -19,11 +19,11 @@ void		InputController::FillValues()
 	}
 	else
 	{
-		collectFacts();
-		setInitFacts();
-		printFacts(); //
-		collectRules();
-		collectQuery();
+		collectFacts(file);
+		setInitFacts(file);
+		printFacts(file); //
+		collectRules(file);
+		collectQuery(file);
 	}
 }
 
@@ -32,7 +32,7 @@ void		InputController::FillValues()
 **	to put then into the corresponding objects.
 */
 
-void		InputController::collectFacts()
+void		InputController::collectFacts(t_ExpSysFile &file)
 {
 	std::list<t_token>::iterator	next;
 	Fact							*newFact;
@@ -41,8 +41,8 @@ void		InputController::collectFacts()
 	std::string						specialLineStr;
 
 
-	for (std::list<t_token>::iterator it = _tokenList.begin();
-			it != _tokenList.end();
+	for (std::list<t_token>::iterator it = file.TokenList.begin();
+			it != file.TokenList.end();
 			it++)
 	{
 		if ((*it).TokenType == FACT)
@@ -52,13 +52,13 @@ void		InputController::collectFacts()
 			{
 				factChar = matches[1].str()[0];
 				// std::cout << "captured: '" << factChar << "'\n";
-				if (_expertSystemDatas->AllFacts.find(factChar)
-						== _expertSystemDatas->AllFacts.end())
+				if (file.AllFacts.find(factChar)
+						== file.AllFacts.end())
 				{
 					newFact = new Fact();
 					newFact->SetName(factChar);
 					newFact->SetValue(false);
-					_expertSystemDatas->AllFacts[factChar] = newFact;
+					file.AllFacts[factChar] = newFact;
 				}
 			}
 		}
@@ -71,32 +71,32 @@ void		InputController::collectFacts()
 				if (specialLineStr[i] >= 'A' && specialLineStr[i] <= 'Z')
 				{
 					factChar = specialLineStr[i];
-					if (_expertSystemDatas->AllFacts.find(factChar)
-						== _expertSystemDatas->AllFacts.end())
+					if (file.AllFacts.find(factChar)
+						== file.AllFacts.end())
 					{
 						newFact = new Fact();
 						newFact->SetName(factChar);
 						newFact->SetValue(false); // no matter the value. init must NOT be done here, as
 												  // we would miss the initialized existing facts.
-						_expertSystemDatas->AllFacts[factChar] = newFact;
+						file.AllFacts[factChar] = newFact;
 					}
 				}
 			}
 		}
 	}
-	this->fillFactsWithMap();
+	this->fillFactsWithMap(file);
 }
 
 /*
 **	Parse the "=" line and set the fact initial values.
 */
 
-void		InputController::setInitFacts()
+void		InputController::setInitFacts(t_ExpSysFile &file)
 {
 	std::string		initFactsLine;
 
-	for (std::list<t_token>::iterator it = _tokenList.begin();
-			it != _tokenList.end();
+	for (std::list<t_token>::iterator it = file.TokenList.begin();
+			it != file.TokenList.end();
 			it++)
 	{
 		if ((*it).TokenType == INIT_FACTS)
@@ -106,7 +106,7 @@ void		InputController::setInitFacts()
 			{
 				if (initFactsLine[i] >= 'A' && initFactsLine[i] <= 'Z')
 				{
-					this->_expertSystemDatas->AllFacts[initFactsLine[i]]->SetValue(true);
+					file.AllFacts[initFactsLine[i]]->SetValue(true);
 				}
 			}
 		}
@@ -117,13 +117,13 @@ void		InputController::setInitFacts()
 **  Fill All Facts with map completed.
 */
 
-void		InputController::fillFactsWithMap( void )
+void		InputController::fillFactsWithMap(t_ExpSysFile &file)
 {
-	for (std::map<char, Fact *>::iterator it = _expertSystemDatas->AllFacts.begin();
-			it != _expertSystemDatas->AllFacts.end();
+	for (std::map<char, Fact *>::iterator it = file.AllFacts.begin();
+			it != file.AllFacts.end();
 			++it)
 	{
-		it->second->SetAllFacts(this->_expertSystemDatas->AllFacts);
+		it->second->SetAllFacts(file.AllFacts);
 	}
 }
 
@@ -131,11 +131,11 @@ void		InputController::fillFactsWithMap( void )
 **	Debug printing method to display FACTS and their status.
 */
 
-void	InputController::printFacts()
+void	InputController::printFacts(t_ExpSysFile &file)
 {
 	std::cout << KYEL "Facts collected: --------------" KRESET << std::endl;
-	for (std::map<char, Fact *>::iterator it = _expertSystemDatas->AllFacts.begin();
-			it != _expertSystemDatas->AllFacts.end();
+	for (std::map<char, Fact *>::iterator it = file.AllFacts.begin();
+			it != file.AllFacts.end();
 			++it)
 	{
     	std::cout << it->first << " => " << it->second->GetName() << " - ";
@@ -153,10 +153,10 @@ void	InputController::printFacts()
 **	Its more easy.
 */
 
-void	InputController::collectRules()
+void	InputController::collectRules(t_ExpSysFile &file)
 {
 	std::string				line;
-	std::stringstream		progStream(_expertSystemDatas->FileString);
+	std::stringstream		progStream(file.Str);
 	// char 					*splittedString;
 	std::size_t				pos;
 	Rule					newRule;
@@ -185,7 +185,7 @@ void	InputController::collectRules()
 			{
 				if (result[i] >= 'A' && result[i] <= 'Z')
 				{
-					_expertSystemDatas->AllFacts.find(result[i])->second->LinkedRules.push_back(newRule);
+					file.AllFacts.find(result[i])->second->LinkedRules.push_back(newRule);
 					std::cout << KGRN "Rule added to " KRESET << result[i] << std::endl; 
 				}
 				i++;
@@ -198,15 +198,15 @@ void	InputController::collectRules()
 **	Stock the token with the whole query line into the global struct.
 */
 
-void		InputController::collectQuery()
+void		InputController::collectQuery(t_ExpSysFile &file)
 {
-	for (std::list<t_token>::iterator it = _tokenList.begin();
-			it != _tokenList.end();
+	for (std::list<t_token>::iterator it = file.TokenList.begin();
+			it != file.TokenList.end();
 			it++)
 	{
 		if ((*it).TokenType == QUERY)
 		{
-			this->_expertSystemDatas->CurQuery = (*it).Value;
+			file.Query = (*it).Value;
 		}
 	}
 }

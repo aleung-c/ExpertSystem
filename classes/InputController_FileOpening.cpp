@@ -4,46 +4,63 @@
 //	File Opening												//
 //																//
 // ------------------------------------------------------------	//
-/*
-**	Main public method to get the file given in input.
-**	This calls the private methods below.
-*/
 
-void		InputController::GetInput()
+int			InputController::getArgs()
 {
-	if (checkArgs() != 0)
+	// basic nb of arg check
+	if (_argc < 2)
 	{
-		throw CustomException(KRED "InputController: Invalid argument\n" KRESET);
+		printUsage();
+		return (-1);
 	}
-	_expertSystemDatas->FileString = readFromFile(_argv[1]);
-	std::cout << KGRN "InputController: FILE OPENING SUCCESS" KRESET << std::endl;
-	// debug print;
-	// std::cout << KYEL "Opened file (comments cleaned): --------------------" KRESET
-	// 	<< std::endl << _expertSystemDatas->FileString << std::endl;
+	// for each arg. check if 1 is option, else try to open file.
+	for (int i = 1; _argv[i]; i++)
+	{
+		if (i == 1 && strncmp(_argv[i], "--verbose", 9) == 0) // position 1 : OPTION ONLY
+		{
+			_expertSystemDatas->Verbose = true;
+			std::cout << KYEL "Verbose mode ON" KRESET << std::endl;
+			if (_argc == 2)
+			{
+				std::cout << KRED "InputController: No file to process!" KRESET << std::endl;
+				return (-1);
+			}
+		}
+		else // for all other, try to open the file.
+		{
+			t_ExpSysFile	CurFile;
+
+			if (strnlen(_argv[i], MAX_FILE_NAME_LEN) >= MAX_FILE_NAME_LEN)
+			{
+				std::cout << KRED "InputController: File name too long" KRESET << std::endl;
+				return (-1);
+			}
+			CurFile.Str = readFromFile(_argv[i]);
+			// put char in path string;
+			std::string path(_argv[i]);
+			CurFile.Path = path;
+			_expertSystemDatas->Files.push_back(CurFile);
+			std::cout << KGRN "InputController: File opened." KRESET << std::endl;
+		}
+	}
+	return (0);
 }
 
 /*
-** Check the arguments given to the program (classic C)
+**	Check the arguments given to the program (classic C)
+**	Unused now to implement multi files.
 */
 
 int		InputController::checkArgs()
 {
-	if (!_initialized)
+	if (_argc != 2)
 	{
-		throw CustomException(KRED "InputController class not initialized!"
-			" Use InputController::Init([...]) first!" KRESET);
+		printUsage();
+		return (-1);
 	}
-	else
+	if (strnlen(_argv[1], MAX_FILE_NAME_LEN) >= MAX_FILE_NAME_LEN)
 	{
-		if (_argc != 2)
-		{
-			printUsage();
-			return (-1);
-		}
-		if (strnlen(_argv[1], MAX_FILE_NAME_LEN) >= MAX_FILE_NAME_LEN)
-		{
-			std::cout << KRED "InputController: File name too long" KRESET << std::endl;
-		}
+		std::cout << KRED "InputController: File name too long" KRESET << std::endl;
 	}
 	return (0);
 }
@@ -72,6 +89,7 @@ std::string			InputController::readFromFile(std::string path)
 	stat(path.c_str(), &path_stat);
 	if (S_ISREG(path_stat.st_mode) != 1)
 	{
+		perror("InputController");
 		throw CustomException(KRED "InputController: File opening error" KRESET);
 	}
 	// actual opening as fstream.
@@ -95,6 +113,7 @@ std::string			InputController::readFromFile(std::string path)
 	else
 	{
 		perror("InputController: open()");
+		perror("InputController");
 		throw CustomException(KRED "InputController: File opening error" KRESET);
 	}
 }

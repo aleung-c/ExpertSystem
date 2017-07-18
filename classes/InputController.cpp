@@ -38,6 +38,31 @@ void		InputController::Init(t_ExpertSystem *expertSystemDatas, int argc, char **
 	_initialized = true;
 }
 
+/*
+**	Main public method to get the file given in input.
+**	This calls the private methods below.
+*/
+
+void		InputController::GetInput()
+{
+	if (!_initialized)
+	{
+		throw CustomException(KRED "InputController class not initialized!"
+			" Use InputController::Init([...]) first!" KRESET);
+	}
+	else
+	{
+		if (getArgs() != 0)
+		{
+			throw CustomException(KRED "InputController: Invalid argument\n" KRESET);
+		}
+		
+		// debug print;
+		// std::cout << KYEL "Opened file (comments cleaned): --------------------" KRESET
+		// 	<< std::endl << _expertSystemDatas->FileString << std::endl;
+	}
+}
+
 // ------------------------------------------------------------	//
 //	File Opening												//
 //																//

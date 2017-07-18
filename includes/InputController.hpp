@@ -24,14 +24,14 @@ class InputController
 		void					Init(t_ExpertSystem *expertSystemDatas,
 										int argc, char **argv);
 		void					GetInput();
-		void					LexParse();
-		void					FillValues();
-		void					fillFactsWithMap();
+		void					LexParse(t_ExpSysFile &file);
+		void					FillValues(t_ExpSysFile &file);
+		void					fillFactsWithMap(t_ExpSysFile &file);
 
 
 		// Information
-		std::map<char, Fact *>	getAllFacts();
-		void					print();
+		std::map<char, Fact *>	getAllFacts(t_ExpSysFile &file);
+		void					print(t_ExpSysFile &file);
 
 	private:
 		bool					_initialized;
@@ -40,28 +40,28 @@ class InputController
 		char					**_argv;		
 		std::ifstream			_currentFile;
 
+		int						getArgs();
+
 		// File Opening
-		int						checkArgs();
+		int						checkArgs(); // (unused)
 		void					printUsage();
 		std::string				readFromFile(std::string path);
 
 		// Lexer Parser
-		std::list<t_token>		_tokenList; // local list of tokens.
+		void					lexInput(t_ExpSysFile &file);
+		void					parseTokenTypes(t_ExpSysFile &file);
+		int						tokenTypeCheck(t_ExpSysFile &file);
+		int						checkTokenPositions(t_ExpSysFile &file);
+		int						checkTokenDuplicates(t_ExpSysFile &file);
+		void					printTokens(t_ExpSysFile &file);
 
-		void					lexInput();
-		void					parseTokenTypes();
-		int						tokenTypeCheck();
-		int						checkTokenPositions();
-		int						checkTokenDuplicates();
-		void					printTokens();
+		void					collectFacts(t_ExpSysFile &file);
+		void					setInitFacts(t_ExpSysFile &file);
+		void					printFacts(t_ExpSysFile &file);
 
-		void					collectFacts();
-		void					setInitFacts();
-		void					printFacts();
+		void					collectRules(t_ExpSysFile &file);
 
-		void					collectRules();
-
-		void					collectQuery();
+		void					collectQuery(t_ExpSysFile &file);
 };
 
 #endif

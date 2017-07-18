@@ -9,16 +9,16 @@
 **
 */
 
-void						InputController::print(void)
+void						InputController::print(t_ExpSysFile &file)
 {
-	for(std::map<char, Fact *>::const_iterator it = _expertSystemDatas->AllFacts.begin();
-    	it != _expertSystemDatas->AllFacts.end(); ++it)
+	for(std::map<char, Fact *>::const_iterator it = file.AllFacts.begin();
+    	it != file.AllFacts.end(); ++it)
 	{
     	std::cout << (*it->second);
 	}
 }
 
-std::map<char, Fact *>		InputController::getAllFacts(void)
+std::map<char, Fact *>		InputController::getAllFacts(t_ExpSysFile &file)
 {
-	return (_expertSystemDatas->AllFacts);
+	return (file.AllFacts);
 }
