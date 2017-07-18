@@ -21,7 +21,7 @@ void		InputController::FillValues(t_ExpSysFile &file)
 	{
 		collectFacts(file);
 		setInitFacts(file);
-		printFacts(file); //
+		// printFacts(file); //
 		collectRules(file);
 		collectQuery(file);
 	}
@@ -148,16 +148,17 @@ void	InputController::printFacts(t_ExpSysFile &file)
 
 /*
 **	RULES go into FACTS --> EACH FACT HAS ASSOCIATED RULES.
+**	Each File has its own facts and rules.
 **
 **	I decided to reparse the whole string file to get the rules.
 **	Its more easy.
+**	The additionnal formating is done here as well.
 */
 
 void	InputController::collectRules(t_ExpSysFile &file)
 {
 	std::string				line;
 	std::stringstream		progStream(file.Str);
-	// char 					*splittedString;
 	std::size_t				pos;
 	Rule					newRule;
 
@@ -166,32 +167,60 @@ void	InputController::collectRules(t_ExpSysFile &file)
 	while (getline(progStream, line))
 	{
 		if ((pos = line.find("=>")) != std::string::npos
-			|| (pos = line.find("<=>") != std::string::npos))
+			|| (pos = line.find("<=>") != std::string::npos)) // not handled anymore.
 		{
-			// we are in a valid rule line.
 			newRule.SetName(line);
-			newRule.SetProposition(line.substr(0 , pos)); // newRule.GetProposition().assign(line.c_str(), pos);  ça convient mieux pour moi, dis moi si ça pose un probleme :)
-			newRule.SetResult(line.c_str() + pos); // newRule.GetResult().assign(&(line[pos]), line.size() - pos);
-			
-			std::cout << KYEL "New Rule: ------------" KRESET << std::endl
-				<< "Name: " << newRule.GetName() << std::endl
-				<< "Proposition: " << newRule.GetProposition() << std::endl
-				<< "Result: " << newRule.GetResult() << std::endl;
+			newRule.SetProposition(line.substr(0 , pos));
+			newRule.SetResult(line.c_str() + pos);
+
+			// additionnal formating (mainly parenthesis spacing)
+			formatRule(newRule);
+
+			// Debug Print;
+				// std::cout << KYEL "New Rule: ------------" KRESET << std::endl
+				// 	<< "Name: " << newRule.GetName() << std::endl
+				// 	<< "Proposition: " << newRule.GetProposition() << std::endl
+				// 	<< "Result: " << newRule.GetResult() << std::endl;
 
 			// we got the rule, now we add it to the conclusional facts.
-			int i = 0;
 			const char *result = newRule.GetResult().c_str();
-			while (result[i])
+			for (int i = 0; result[i]; i++)
 			{
 				if (result[i] >= 'A' && result[i] <= 'Z')
 				{
 					file.AllFacts.find(result[i])->second->LinkedRules.push_back(newRule);
-					std::cout << KGRN "Rule added to " KRESET << result[i] << std::endl; 
+					// std::cout << KGRN "Rule added to " KRESET << result[i] << std::endl; 
 				}
-				i++;
 			}
 		}
 	}
+}
+
+void		InputController::formatRule(Rule &newRule)
+{
+	std::size_t			tmp_pos;
+	std::string			proposition;
+
+	proposition = newRule.GetProposition();
+	// format "("
+	tmp_pos = proposition.find("(", 0);
+	while (tmp_pos != std::string::npos)
+	{
+		proposition.insert(tmp_pos + 1, 1, ' ');
+		proposition.insert(tmp_pos, 1, ' ');
+		newRule.SetProposition(proposition);
+		tmp_pos = proposition.find("(", tmp_pos + 2); // +2 cause space was added in front.
+	}
+	// format ")"
+	tmp_pos = proposition.find(")", 0);
+	while (tmp_pos != std::string::npos)
+	{
+		proposition.insert(tmp_pos + 1, 1, ' ');
+		proposition.insert(tmp_pos, 1, ' ');
+		newRule.SetProposition(proposition);
+		tmp_pos = proposition.find(")", tmp_pos + 2); // +2 cause space was added in front.
+	}
+	// std::cout << KMAG "Rule fomatted: [" << newRule.GetProposition() << KRESET << std::endl;
 }
 
 /*

@@ -77,7 +77,10 @@ void				InputController::lexInput(t_ExpSysFile &file)
 
 void		InputController::parseTokenTypes(t_ExpSysFile &file)
 {
-	for (std::list<t_token>::iterator it = file.TokenList.begin(); it != file.TokenList.end() ; it++)
+	size_t tmp_pos;
+
+	for (std::list<t_token>::iterator it = file.TokenList.begin();
+		it != file.TokenList.end() ; it++)
 	{
 		(*it).ExitParenthesis = false;
 		(*it).EntryParenthesis = false;
@@ -86,12 +89,18 @@ void		InputController::parseTokenTypes(t_ExpSysFile &file)
 		{
 			(*it).TokenType = FACT;
 			// CHECKING FOR PARENTHESIS SIDE - Entry or exit ?
-			if ((*it).Value.find("(") != std::string::npos)
+			if ((tmp_pos = (*it).Value.find("(")) != std::string::npos)
+			{
 				(*it).EntryParenthesis = true;
-			if ((*it).Value.find(")") != std::string::npos)
+				if ((*it).Value[tmp_pos - 1]== '!')
+					(*it).TokenType = ERROR;
+			}
+			if ((tmp_pos = (*it).Value.find(")")) != std::string::npos)
+			{
 				(*it).ExitParenthesis = true;
+			}
 		}
-		else if (std::regex_match((*it).Value, std::regex("^[+|^]$|^=>$|^<=>$")))
+		else if (std::regex_match((*it).Value, std::regex("^[+|^*]$|^=>$")))
 		{
 			(*it).TokenType = SYMBOL;
 		}
@@ -120,7 +129,8 @@ int					InputController::tokenTypeCheck(t_ExpSysFile &file)
 {
 	int		nbOfErrors = 0;
 
-	for(std::list<t_token>::iterator it = file.TokenList.begin(); it != file.TokenList.end() ; it++)
+	for(std::list<t_token>::iterator it = file.TokenList.begin();
+		it != file.TokenList.end() ; it++)
 	{
 		if ((*it).TokenType == ERROR)
 		{
@@ -139,7 +149,7 @@ int					InputController::tokenTypeCheck(t_ExpSysFile &file)
 
 /*
 **	Second pass on the tokens: are they rightly placed?
-**	For example, we cannot have an symbol at the start of a line.
+**	For example, we cannot have a symbol at the start of a line.
 */
 
 int				InputController::checkTokenPositions(t_ExpSysFile &file)
@@ -147,7 +157,8 @@ int				InputController::checkTokenPositions(t_ExpSysFile &file)
 	int								nbOfErrors = 0;
 	std::list<t_token>::iterator	next;
 
-	for (std::list<t_token>::iterator it = file.TokenList.begin(); it != file.TokenList.end() ; it++)
+	for (std::list<t_token>::iterator it = file.TokenList.begin();
+		it != file.TokenList.end() ; it++)
 	{
 		// next = it++;
 		next = it;
@@ -163,7 +174,8 @@ int				InputController::checkTokenPositions(t_ExpSysFile &file)
 		}
 		// check for solo SYMBOL on end of line.
 		if ((*it).TokenType == SYMBOL
-			&& ((next != file.TokenList.end() && (*it).LineNumber != (*next).LineNumber)
+			&& ((next != file.TokenList.end()
+			&& (*it).LineNumber != (*next).LineNumber)
 			|| next == file.TokenList.end()))
 		{
 			nbOfErrors += 1;
@@ -211,7 +223,8 @@ int			InputController::checkTokenDuplicates(t_ExpSysFile &file)
 	int								nbQueries = 0;
 	std::list<t_token>::iterator	next;
 
-	for (std::list<t_token>::iterator it = file.TokenList.begin(); it != file.TokenList.end() ; it++)
+	for (std::list<t_token>::iterator it = file.TokenList.begin();
+		it != file.TokenList.end() ; it++)
 	{
 		if ((*it).TokenType == INIT_FACTS)
 		{
@@ -248,7 +261,8 @@ int			InputController::checkTokenDuplicates(t_ExpSysFile &file)
 void		InputController::printTokens(t_ExpSysFile &file)
 {
 	printf(KYEL "Tokenized file: --------------------------%s\n", KRESET);
-	for(std::list<t_token>::iterator it = file.TokenList.begin(); it != file.TokenList.end() ; it++)
+	for(std::list<t_token>::iterator it = file.TokenList.begin();
+		it != file.TokenList.end() ; it++)
 	{
 		printf("token : line %d col %d -", (*it).LineNumber,(*it).NumberInLine);
 		if ((*it).TokenType == FACT)

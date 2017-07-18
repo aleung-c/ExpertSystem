@@ -45,9 +45,9 @@ void	MainController::Run(int argc, char **argv)
 			InputController.print(*it);
 		
 			// II. Resolution handling
-			Game = GameController((*it).Query, InputController.getAllFacts(*it), ExpertSystemDatas->Verbose);	// first arg is the query needed
-			std::cout << Game;												// Once the query, the = and the Proposition (see Rule.cpp l.150) are stored correctly 
-			Game.run();													// you can uncomment the RUN ()
+			Game = GameController((*it).Query, InputController.getAllFacts(*it), ExpertSystemDatas->Verbose);
+			std::cout << Game;
+			Game.run();
 		}
 	}
 	catch (CustomException &e)

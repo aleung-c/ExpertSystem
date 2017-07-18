@@ -28,7 +28,6 @@ class InputController
 		void					FillValues(t_ExpSysFile &file);
 		void					fillFactsWithMap(t_ExpSysFile &file);
 
-
 		// Information
 		std::map<char, Fact *>	getAllFacts(t_ExpSysFile &file);
 		void					print(t_ExpSysFile &file);
@@ -60,6 +59,7 @@ class InputController
 		void					printFacts(t_ExpSysFile &file);
 
 		void					collectRules(t_ExpSysFile &file);
+		void					formatRule(Rule &newRule);
 
 		void					collectQuery(t_ExpSysFile &file);
 };
