@@ -23,6 +23,7 @@ void		InputController::FillValues(t_ExpSysFile &file)
 		setInitFacts(file);
 		// printFacts(file); //
 		collectRules(file);
+		collectDuplicateRules(file);
 		collectQuery(file);
 	}
 }
