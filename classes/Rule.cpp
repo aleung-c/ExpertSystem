@@ -58,7 +58,7 @@ bool				Rule::IsCheck( mapFacts list ) const
 
 	while (tmpstr >> out)
 	{
-		if (std::strstr("|^+", out.c_str()))
+		if (std::strstr(OPERATORS, out.c_str()))
 		{
 			two = facts.top();
 			facts.pop();
@@ -76,7 +76,7 @@ bool				Rule::IsCheck( mapFacts list ) const
 	}
 	if (facts.empty() || facts.top().s.empty())
 		return (facts.top().b);
-	
+
 	// In case we have a rule without operator
 	one = facts.top();
 	return (this->_factOrRevFact(list, one));
@@ -151,48 +151,58 @@ std::string			Rule::_convertToNPI(std::string str)
 	std::string				out;
 	std::stringstream		tmpstr(str);
 	std::stack<std::string>	operators;
+	std::map<char, int>		priority = { {'+', 3}, {'|', 2}, {'^', 1}, {'*', 0} };
 
 	while (tmpstr >> out)
 	{
-		if (std::strstr("|^+", out.c_str()))
+		if (std::strstr(OPERATORS, out.c_str()))
+		{
+			if (!operators.empty() and priority[out.c_str()[0]] <= priority[operators.top()[0]])
+				this->_changeStack(NPI, operators);
 			operators.push(out);
+		}
 		else if (std::strstr("(", out.c_str()))
-			;
+			operators.push(out);
 		else if (std::strstr(")", out.c_str()))
 		{
-			NPI += operators.top() + " ";
+			while (!std::strstr("(", operators.top().c_str()))
+				this->_changeStack(NPI, operators);
 			operators.pop();
 		}
 		else
 			NPI += (out + " ");
 	}
 	while (!operators.empty())
-	{
-		NPI += operators.top() + " ";
-		operators.pop();
-	}
+		this->_changeStack(NPI, operators);
 	return (this->_strtrim(NPI));
+}
+
+void				Rule::_changeStack(std::string & NPI, std::stack<std::string> & operators)
+{
+	NPI += operators.top() + " ";
+	operators.pop();
 }
 
 /*
 **  Solver
 */
 
-bool			Rule::_chooseOperator(mapFacts list, Value one, Value two, char op) const
+bool				Rule::_chooseOperator(mapFacts list, Value one, Value two, char op) const
 {
 	if (op == '|')
 		return (this->_factOrRevFact(list, one) || this->_factOrRevFact(list, two));
 	else if (op == '+')
 		return (this->_factOrRevFact(list, one) && this->_factOrRevFact(list, two));
+	else if (op == '*')
+		return (this->_factOrRevFact(list, one) && this->_factOrRevFact(list, two));
 	return (this->_factOrRevFact(list, one) ^ this->_factOrRevFact(list, two));
 }
-
 
 /*
 **  For !Fact ( like !A)
 */
 
-bool			Rule::_factOrRevFact(mapFacts list, Value val) const
+bool				Rule::_factOrRevFact(mapFacts list, Value val) const
 {
 	if (val.s.empty())
 		return (val.b);

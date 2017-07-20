@@ -149,10 +149,9 @@ std::ostream &				operator<<(std::ostream & o, Fact const & i)
 		o << " with no Rule.";
 	else
 	{
-		o << " with Rule:" KGRN;
+		o << " with Rule:";
 		for(std::vector<Rule>::const_iterator it = i.LinkedRules.begin(); it != i.LinkedRules.end(); ++it)
-			o << " " << it->GetProposition();
-		o << KRESET;
+			o << " [ " KGRN << it->GetProposition() << KRESET " ]";
 	}
 	o << std::endl;
 	return (o);

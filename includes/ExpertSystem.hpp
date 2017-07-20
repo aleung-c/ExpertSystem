@@ -17,6 +17,8 @@
 #define KWHT  "\x1B[37m"
 #define KRESET "\x1B[0m"
 
+#define OPERATORS "|^+*"
+
 // General includes
 # include <unistd.h>
 # include <stdio.h>

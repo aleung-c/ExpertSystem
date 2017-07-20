@@ -1,5 +1,6 @@
 A + B ^ !C => D
-E => W
 D + A ^ !B => E
-=A
+!C ^ B + A + C | D ^ Y | B + V => W
+V | D ^ A | B => W
+=
 ?DWBE

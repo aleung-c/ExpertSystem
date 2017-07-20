@@ -1,6 +1,6 @@
 NAME=ExpertSystem
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -std=c++11
 INCLUDES= -I includes/ 
 
 CPP_DIR=src

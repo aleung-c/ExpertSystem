@@ -1,6 +1,8 @@
 #ifndef RULE_HPP
 # define RULE_HPP
 
+#include <stack>
+
 # include "ExpertSystem.hpp"
 
 struct Value {
@@ -23,7 +25,7 @@ class Rule
 		std::string		GetPoloneseInversed( void ) const;
 		std::string		GetProposition( void ) const;
 		std::string		GetResult( void ) const;
-	
+
 		// Setter
 		void			SetName(std::string name);
 		void			SetPoloneseInversed( void );
@@ -39,6 +41,7 @@ class Rule
 		std::string		_convertToNPI(std::string str); /* Algorithme Shunting-yard basic */
 		bool			_chooseOperator(mapFacts list, Value one, Value two, char op) const;
 		bool			_factOrRevFact(mapFacts list, Value val) const;
+		void			_changeStack(std::string & NPI, std::stack<std::string>	& operators);
 
 		std::string		_name;
 		std::string		_poloneseInversed;

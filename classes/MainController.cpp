@@ -50,7 +50,6 @@ void	MainController::Run(int argc, char **argv)
 
 					// II. Resolution handling
 					Game = GameController((*it).Query, InputController.getAllFacts(*it), ExpertSystemDatas->Verbose);
-					std::cout << Game;
 					Game.run();
 				}
 			}

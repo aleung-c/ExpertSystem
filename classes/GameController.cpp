@@ -40,7 +40,8 @@ GameController::~GameController ( void )
 GameController::GameController ( std::string query, mapFacts allFacts, bool verbose )
 :_verbose(verbose), _query(query), _allFacts(allFacts)
 {
-	(void)_verbose;
+	if (this->_verbose)
+		std::cout << *this;
 	return ;
 }
 
