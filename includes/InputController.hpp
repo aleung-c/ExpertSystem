@@ -52,6 +52,7 @@ class InputController
 		int						tokenTypeCheck(t_ExpSysFile &file);
 		int						checkTokenPositions(t_ExpSysFile &file);
 		int						checkTokenDuplicates(t_ExpSysFile &file);
+		int						checkParenthesis(t_ExpSysFile &file);
 		void					printTokens(t_ExpSysFile &file);
 
 		void					collectFacts(t_ExpSysFile &file);

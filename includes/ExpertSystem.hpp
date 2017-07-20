@@ -101,6 +101,7 @@ typedef struct					s_ExpSysFile
 	std::string					Query;
 	std::map<char, Fact *>		AllFacts;
 	std::list<t_token>			TokenList;
+	bool						NotAFile;
 }								t_ExpSysFile;
 
 typedef struct					s_ExpertSystem

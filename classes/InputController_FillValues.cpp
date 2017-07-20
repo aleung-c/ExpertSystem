@@ -36,41 +36,25 @@ void		InputController::collectFacts(t_ExpSysFile &file)
 {
 	std::list<t_token>::iterator	next;
 	Fact							*newFact;
-	std::smatch						matches;
 	char							factChar;
-	std::string						specialLineStr;
+	std::string						lineStr;
 
 
 	for (std::list<t_token>::iterator it = file.TokenList.begin();
 			it != file.TokenList.end();
 			it++)
 	{
-		if ((*it).TokenType == FACT)
+		// parse facts
+		if ((*it). TokenType == FACT
+			|| (*it).TokenType == INIT_FACTS
+			|| (*it).TokenType == QUERY)
 		{
-			if (std::regex_match((*it).Value, matches,
-				std::regex("^!?\\(?([A-Z])\\)?$")))
+			lineStr = (*it).Value;
+			for (int i = 0; lineStr[i]; i++)
 			{
-				factChar = matches[1].str()[0];
-				// std::cout << "captured: '" << factChar << "'\n";
-				if (file.AllFacts.find(factChar)
-						== file.AllFacts.end())
+				if (lineStr[i] >= 'A' && lineStr[i] <= 'Z')
 				{
-					newFact = new Fact();
-					newFact->SetName(factChar);
-					newFact->SetValue(false);
-					file.AllFacts[factChar] = newFact;
-				}
-			}
-		}
-		// parse init facts and query line for unruled facts.
-		if ((*it).TokenType == INIT_FACTS || (*it).TokenType == QUERY)
-		{
-			specialLineStr = (*it).Value;
-			for (int i = 0; specialLineStr[i]; i++)
-			{
-				if (specialLineStr[i] >= 'A' && specialLineStr[i] <= 'Z')
-				{
-					factChar = specialLineStr[i];
+					factChar = lineStr[i];
 					if (file.AllFacts.find(factChar)
 						== file.AllFacts.end())
 					{
@@ -175,7 +159,6 @@ void	InputController::collectRules(t_ExpSysFile &file)
 
 			// additionnal formating (mainly parenthesis spacing)
 			formatRule(newRule);
-
 			// Debug Print;
 				// std::cout << KYEL "New Rule: ------------" KRESET << std::endl
 				// 	<< "Name: " << newRule.GetName() << std::endl

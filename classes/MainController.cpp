@@ -36,20 +36,23 @@ void	MainController::Run(int argc, char **argv)
 		{
 			try
 			{
-				std::cout << std::endl << KCYN "------------------------------------------- " KRESET << std::endl;
-				std::cout << KCYN "  File: " << (*it).Path << std::endl;
-				std::cout << KCYN "------------------------------------------- " KRESET << std::endl;
-				InputController.print(*it);
-				InputController.LexParse(*it);
-				InputController.FillValues(*it);
+				if ((*it).NotAFile == false)
+				{
+					std::cout << std::endl << KCYN "------------------------------------------- " KRESET << std::endl;
+					std::cout << KCYN "  File: " << (*it).Path << std::endl;
+					std::cout << KCYN "------------------------------------------- " KRESET << std::endl;
+					InputController.print(*it);
+					InputController.LexParse(*it);
+					InputController.FillValues(*it);
 
-				std::cout << KYEL "After Input: ------------" KRESET << std::endl;
-				InputController.print(*it);
+					std::cout << KYEL "After Input: ------------" KRESET << std::endl;
+					InputController.print(*it);
 
-				// II. Resolution handling
-				Game = GameController((*it).Query, InputController.getAllFacts(*it), ExpertSystemDatas->Verbose);
-				std::cout << Game;
-				Game.run();
+					// II. Resolution handling
+					Game = GameController((*it).Query, InputController.getAllFacts(*it), ExpertSystemDatas->Verbose);
+					std::cout << Game;
+					Game.run();
+				}
 			}
 			catch (CustomException &e)
 			{

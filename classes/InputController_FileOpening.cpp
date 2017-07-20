@@ -39,8 +39,17 @@ int			InputController::getArgs()
 			// put char in path string;
 			std::string path(_argv[i]);
 			CurFile.Path = path;
+			if (!CurFile.Str.empty())
+			{
+				std::cout << KGRN "InputController: File opened." KRESET << std::endl;
+				CurFile.NotAFile = false;
+			}
+			else
+			{
+				CurFile.NotAFile = true;
+				std::cout << KYEL "InputController: Not a file." KRESET << std::endl;
+			}
 			_expertSystemDatas->Files.push_back(CurFile);
-			std::cout << KGRN "InputController: File opened." KRESET << std::endl;
 		}
 	}
 	return (0);
@@ -89,8 +98,8 @@ std::string			InputController::readFromFile(std::string path)
 	stat(path.c_str(), &path_stat);
 	if (S_ISREG(path_stat.st_mode) != 1)
 	{
-		perror("InputController");
-		throw CustomException(KRED "InputController: File opening error" KRESET);
+		std::cout << KRED "InputController S_ISREG: File opening error" KRESET << std::endl;
+		return (ret);
 	}
 	// actual opening as fstream.
 	_currentFile.open(path);
@@ -113,7 +122,7 @@ std::string			InputController::readFromFile(std::string path)
 	else
 	{
 		perror("InputController: open()");
-		perror("InputController");
-		throw CustomException(KRED "InputController: File opening error" KRESET);
+		std::cout << KRED "InputController open(): File opening error" KRESET << std::endl;
+		return (ret);
 	}
 }

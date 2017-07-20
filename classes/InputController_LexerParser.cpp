@@ -29,9 +29,12 @@ void		InputController::LexParse(t_ExpSysFile &file)
 		// STEP 4 : are they correctly positionned in their lines?
 		if (checkTokenPositions(file) != 0)
 			throw CustomException(KRED "InputController: Parser: invalid token position." KRESET);
-		// STEP % : are there forbidden duplicates?
+		// STEP 5 : are there forbidden duplicates?
 		if (checkTokenDuplicates(file) != 0)
 			throw CustomException(KRED "InputController: Parser: missing or duplicate token." KRESET);
+		// STEP 6 : Are parenthesis well used?
+		if (checkParenthesis(file) != 0)
+			throw CustomException(KRED "InputController: Parser: Invalid use of parenthesis." KRESET);
 		std::cout << KGRN "InputController: PARSING SUCCESS" KRESET << std::endl;
 	}
 }
@@ -85,7 +88,7 @@ void		InputController::parseTokenTypes(t_ExpSysFile &file)
 		(*it).ExitParenthesis = false;
 		(*it).EntryParenthesis = false;
 		// regexes for VALUE, SYMBOL, FACT, QUERY.
-		if (std::regex_match((*it).Value, std::regex("^!?\\(?[A-Z]\\)?$")))
+		if (std::regex_match((*it).Value, std::regex("^!?\\(*[A-Z]\\)*$")))
 		{
 			(*it).TokenType = FACT;
 			// CHECKING FOR PARENTHESIS SIDE - Entry or exit ?
@@ -100,7 +103,7 @@ void		InputController::parseTokenTypes(t_ExpSysFile &file)
 				(*it).ExitParenthesis = true;
 			}
 		}
-		else if (std::regex_match((*it).Value, std::regex("^[+|^*]$|^=>$")))
+		else if (std::regex_match((*it).Value, std::regex("^[+|^()*]$|^=>$")))
 		{
 			(*it).TokenType = SYMBOL;
 		}
@@ -165,7 +168,9 @@ int				InputController::checkTokenPositions(t_ExpSysFile &file)
 		next++;
 		// ------ SYMBOLS position check;
 		// check for symbol at start of line.
-		if ((*it).NumberInLine == 0 && (*it).TokenType == SYMBOL)
+		if ((*it).NumberInLine == 0
+			&& (*it).TokenType == SYMBOL
+			&& (*it).Value != "(")
 		{
 			nbOfErrors += 1;
 			std::cout << KRED "Line " << (*it).LineNumber << " col "
@@ -175,7 +180,8 @@ int				InputController::checkTokenPositions(t_ExpSysFile &file)
 		// check for solo SYMBOL on end of line.
 		if ((*it).TokenType == SYMBOL
 			&& ((next != file.TokenList.end()
-			&& (*it).LineNumber != (*next).LineNumber)
+			&& (*it).LineNumber != (*next).LineNumber
+			&& (*it).Value != ")")
 			|| next == file.TokenList.end()))
 		{
 			nbOfErrors += 1;
@@ -186,13 +192,41 @@ int				InputController::checkTokenPositions(t_ExpSysFile &file)
 		// check for two SYMBOLs following each other
 		if ((*it).TokenType == SYMBOL && next != file.TokenList.end()
 			&& (*it).LineNumber == (*next).LineNumber
-			&& (*next).TokenType == (*it).TokenType)
+			&& (*next).TokenType == (*it).TokenType
+			&& (*it).Value != "(" && (*next).Value != "("
+			&& (*it).Value != ")" && (*next).Value != ")")
 		{
 			nbOfErrors += 1;
 			std::cout << KRED "Line " << (*it).LineNumber << " col "
 			<< (*it).NumberInLine << ": two symbols cannot be consecutive: \""
 			<< (*it).Value << "\"" KRESET << std::endl;
 		}
+		if ((*it).TokenType == FACT && next != file.TokenList.end()
+			&& (*next).TokenType == SYMBOL
+			&& (*next).Value == "(" )
+		{
+			nbOfErrors += 1;
+			std::cout << KRED "Line " << (*it).LineNumber << " col "
+			<< (*it).NumberInLine << ": Fact cannot be before opening parenthesis: \""
+			<< (*it).Value << "\"" KRESET << std::endl;
+		}
+		if ((*it).TokenType == SYMBOL && next != file.TokenList.end()
+			&& (*it).Value == ")" && (*next).TokenType == FACT)
+		{
+			nbOfErrors += 1;
+			std::cout << KRED "Line " << (*it).LineNumber << " col "
+			<< (*it).NumberInLine << ": Fact cannot be after closing parenthesis: \""
+			<< (*it).Value << "\"" KRESET << std::endl;
+		}
+		if ((*it).TokenType == SYMBOL && next != file.TokenList.end()
+			&& (*it).Value == "(" && (*next).Value == ")")
+		{
+			nbOfErrors += 1;
+			std::cout << KRED "Line " << (*it).LineNumber << " col "
+			<< (*it).NumberInLine << ": Empty parenthesis: \""
+			<< (*it).Value << "\"" KRESET << std::endl;
+		}
+
 		// ------ FACT position check;
 		// check for two consecutive facts in rule.
 		if ((*it).TokenType == FACT && next != file.TokenList.end()
@@ -256,6 +290,34 @@ int			InputController::checkTokenDuplicates(t_ExpSysFile &file)
 		return (-1);
 	}
 	return (0); // All green;
+}
+
+int			InputController::checkParenthesis(t_ExpSysFile &file)
+{
+	std::string				line;
+	std::stringstream		progStream(file.Str);
+	int						i;
+	unsigned int			nb_entry_parenthesis;
+	unsigned int			nb_exit_parenthesis;
+
+	nb_entry_parenthesis = 0;
+	nb_exit_parenthesis = 0;
+	while (getline(progStream, line))
+	{
+		for (i = 0; line[i]; i++)
+		{
+			if (line[i] == '(')
+				nb_entry_parenthesis += 1;
+			else if (line[i] == ')')
+				nb_exit_parenthesis += 1;
+		}
+	}
+	if (nb_entry_parenthesis != nb_exit_parenthesis)
+	{
+		std::cout << KRED "Parser error: Invalid number of parenthesis." KRESET << std::endl;
+		return (-1);
+	}
+	return (0);
 }
 
 void		InputController::printTokens(t_ExpSysFile &file)
