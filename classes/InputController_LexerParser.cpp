@@ -194,7 +194,7 @@ int				InputController::checkTokenPositions(t_ExpSysFile &file)
 			&& (*it).LineNumber == (*next).LineNumber
 			&& (*next).TokenType == (*it).TokenType
 			&& (*it).Value != "(" && (*next).Value != "("
-			&& (*it).Value != ")" && (*next).Value != ")")
+			&& (*it).Value != ")" )
 		{
 			nbOfErrors += 1;
 			std::cout << KRED "Line " << (*it).LineNumber << " col "
@@ -202,6 +202,7 @@ int				InputController::checkTokenPositions(t_ExpSysFile &file)
 			<< (*it).Value << "\"" KRESET << std::endl;
 		}
 		if ((*it).TokenType == FACT && next != file.TokenList.end()
+			&& (*it).LineNumber == (*next).LineNumber
 			&& (*next).TokenType == SYMBOL
 			&& (*next).Value == "(" )
 		{
@@ -211,6 +212,7 @@ int				InputController::checkTokenPositions(t_ExpSysFile &file)
 			<< (*it).Value << "\"" KRESET << std::endl;
 		}
 		if ((*it).TokenType == SYMBOL && next != file.TokenList.end()
+			&& (*it).LineNumber == (*next).LineNumber
 			&& (*it).Value == ")" && (*next).TokenType == FACT)
 		{
 			nbOfErrors += 1;
@@ -219,11 +221,22 @@ int				InputController::checkTokenPositions(t_ExpSysFile &file)
 			<< (*it).Value << "\"" KRESET << std::endl;
 		}
 		if ((*it).TokenType == SYMBOL && next != file.TokenList.end()
+			&& (*it).LineNumber == (*next).LineNumber
 			&& (*it).Value == "(" && (*next).Value == ")")
 		{
 			nbOfErrors += 1;
 			std::cout << KRED "Line " << (*it).LineNumber << " col "
 			<< (*it).NumberInLine << ": Empty parenthesis: \""
+			<< (*it).Value << "\"" KRESET << std::endl;
+		}
+
+		if ((*it).TokenType == SYMBOL && next != file.TokenList.end()
+			&& (*it).LineNumber == (*next).LineNumber
+			&& (*it).Value == ")" && (*next).Value == "(")
+		{
+			nbOfErrors += 1;
+			std::cout << KRED "Line " << (*it).LineNumber << " col "
+			<< (*it).NumberInLine << ": Opposite Parenthesis: \""
 			<< (*it).Value << "\"" KRESET << std::endl;
 		}
 
