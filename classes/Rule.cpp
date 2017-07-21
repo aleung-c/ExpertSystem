@@ -1,5 +1,6 @@
 #include "Rule.hpp"
 #include <stack>
+#include <regex>
 
 // STATIC ########################################################
 
@@ -79,6 +80,9 @@ bool				Rule::IsCheck( mapFacts list ) const
 
 	// In case we have a rule without operator
 	one = facts.top();
+	if (this->_checkUnknownBehavior(list, one))
+		throw CustomException("Unknown Behavior");
+
 	return (this->_factOrRevFact(list, one));
 }
 
@@ -132,6 +136,35 @@ void				Rule::SetResult(std::string str)
 // ###############################################################
 
 // PRIVATE METHOD ################################################
+
+bool				Rule::_checkUnknownBehavior(mapFacts list, Value v) const
+{
+	std::vector<Rule>	rules;
+	std::regex			word("[=|>| ]");
+	std::string			result;
+	std::string			proposition;
+
+	if (v.s.empty())
+		return (false);
+
+	rules = (v.s[0] == '!') ? list[v.s[1]]->LinkedRules : list[v.s[0]]->LinkedRules;
+	for(unsigned int i = 0 ; i < rules.size(); i++)
+	{
+		result = std::regex_replace(rules[i].GetResult().c_str(),word,"",std::regex_constants::format_default);
+		proposition = std::regex_replace(rules[i].GetProposition().c_str(), word, "", std::regex_constants::format_default);
+		if (this->_communChar(this->_proposition, result) && this->_communChar(this->_result, proposition)) /* We compare the facts of proposition's rule and result's of a other for unknown behavior */
+			return (true);
+	}
+	return (false);
+}
+
+bool				Rule::_communChar(std::string str, std::string tofind) const
+{
+	for (size_t i = 0; i < tofind.size(); i++)
+		if (std::strchr(str.c_str(), tofind[i]) != NULL)
+			return (true);
+	return (false);
+}
 
 std::string			Rule::_strtrim(std::string str)
 {

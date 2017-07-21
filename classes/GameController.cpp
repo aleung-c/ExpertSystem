@@ -42,7 +42,6 @@ GameController::GameController ( std::string query, mapFacts allFacts, bool verb
 {
 	if (this->_verbose)
 		std::cout << *this;
-		std::cout << "FinalResult " KYEL << this->getFinalResult() << KRESET << std::endl;
 	return ;
 }
 

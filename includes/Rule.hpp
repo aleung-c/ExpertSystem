@@ -33,7 +33,7 @@ class Rule
 		void			SetResult(std::string str);
 
 		// For algorythme
-		bool			IsCheck( mapFacts list  ) const;
+		bool			IsCheck( mapFacts list ) const;
 
 	private:
 
@@ -42,6 +42,8 @@ class Rule
 		bool			_chooseOperator(mapFacts list, Value one, Value two, char op) const;
 		bool			_factOrRevFact(mapFacts list, Value val) const;
 		void			_changeStack(std::string & NPI, std::stack<std::string>	& operators);
+		bool			_checkUnknownBehavior(mapFacts list, Value v) const;
+		bool			_communChar(std::string str, std::string tofind) const;
 
 		bool			_jokerChoice(mapFacts list, Value one, Value two) const;
 		bool			_checkInput(void) const;

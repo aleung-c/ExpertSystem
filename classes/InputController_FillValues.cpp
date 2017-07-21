@@ -39,7 +39,6 @@ void		InputController::collectFacts(t_ExpSysFile &file)
 	char							factChar;
 	std::string						lineStr;
 
-
 	for (std::list<t_token>::iterator it = file.TokenList.begin();
 			it != file.TokenList.end();
 			it++)
