@@ -14,7 +14,7 @@ class MainController
 		t_ExpertSystem		*ExpertSystemDatas;
 
 		InputController		InputController;
-		GameController		Game;
+		GameController		*Game;
 
 		MainController(t_ExpertSystem &expertSystemDatas);
 		~MainController();

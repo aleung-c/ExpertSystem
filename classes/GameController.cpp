@@ -37,11 +37,12 @@ GameController::~GameController ( void )
 
 // CONSTRUCTOR POLYMORPHISM ######################################
 
-GameController::GameController ( std::string query, mapFacts allFacts, bool verbose )
-:_verbose(verbose), _query(query), _allFacts(allFacts)
+GameController::GameController ( std::string query, mapFacts allFacts, bool verbose, bool final )
+: _query(query), _allFacts(allFacts), _verbose(verbose), _finalResult(final)
 {
 	if (this->_verbose)
 		std::cout << *this;
+		std::cout << "FinalResult " KYEL << this->getFinalResult() << KRESET << std::endl;
 	return ;
 }
 
@@ -58,10 +59,17 @@ void					GameController::run( void )
 	for ( size_t i = 0 ; i < this->_query.length(); i++)
 	{
 		if (this->_query[i] != '?')
-			std::cout << "Query for fact " << this->_query[i]
-						<< " is " << (this->_allFacts[this->_query[i]])->GetValueRules()
-						<< std::endl;
+		{
+			if ((this->_allFacts[this->_query[i]])->GetValueRules())
+				std::cout << "Query for fact " KYEL << this->_query[i] << KRESET " is " KGRN << true << KRESET << std::endl;
+			else
+			{
+				std::cout << "Query for fact " KYEL << this->_query[i] << KRESET " is " KRED << false << KRESET << std::endl;
+				this->_finalResult = false;
+			}
+		}
 	}
+	this->_printFinalResult();
 }
 
 // ###############################################################
@@ -76,6 +84,14 @@ const mapFacts &		GameController::getAllFacts( void ) const
 {
 	return(this->_allFacts);
 }
+bool					GameController::getVerbose( void ) const
+{
+	return(this->_verbose);
+}
+bool					GameController::getFinalResult( void ) const
+{
+	return(this->_finalResult);
+}
 
 // ###############################################################
 
@@ -84,6 +100,14 @@ const mapFacts &		GameController::getAllFacts( void ) const
 // ###############################################################
 
 // PRIVATE METHOD ################################################
+
+void					GameController::_printFinalResult( void ) const
+{
+	if (this->_finalResult)
+		std::cout << "Query " KYEL << this->_query << KRESET " is " KGRN << true << KRESET << std::endl;
+	else
+		std::cout << "Query " KYEL << this->_query << KRESET " is " KRED << false << KRESET << std::endl;
+}
 
 // ###############################################################
 
@@ -95,7 +119,6 @@ const mapFacts &		GameController::getAllFacts( void ) const
 
 std::ostream &			operator<<(std::ostream & o, GameController const & i)
 {
-
 	o << KYEL "In GameController: ------------" KRESET << std::endl;
 	o << "Query: " KGRN << i.getQuery() << std::endl << KRESET "Facts:" << std::endl;
 	for(mapFacts::const_iterator it = i.getAllFacts().begin();

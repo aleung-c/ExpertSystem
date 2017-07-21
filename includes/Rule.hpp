@@ -43,11 +43,14 @@ class Rule
 		bool			_factOrRevFact(mapFacts list, Value val) const;
 		void			_changeStack(std::string & NPI, std::stack<std::string>	& operators);
 
+		bool			_jokerChoice(mapFacts list, Value one, Value two) const;
+		bool			_checkInput(void) const;
+		std::string		_valueToStr(Value v) const;
+
 		std::string		_name;
 		std::string		_poloneseInversed;
 		std::string		_proposition;
 		std::string		_result;
 };
-
 
 #endif

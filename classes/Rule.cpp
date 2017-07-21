@@ -193,9 +193,48 @@ bool				Rule::_chooseOperator(mapFacts list, Value one, Value two, char op) cons
 		return (this->_factOrRevFact(list, one) || this->_factOrRevFact(list, two));
 	else if (op == '+')
 		return (this->_factOrRevFact(list, one) && this->_factOrRevFact(list, two));
-	else if (op == '*')
+	else if (op == '^')
 		return (this->_factOrRevFact(list, one) && this->_factOrRevFact(list, two));
-	return (this->_factOrRevFact(list, one) ^ this->_factOrRevFact(list, two));
+	return (this->_jokerChoice(list, one, two));
+}
+
+/*
+**  Joker
+*/
+
+bool				Rule::_jokerChoice(mapFacts list, Value one, Value two) const
+{
+	std::string						str;
+	std::map<std::string, char>		choice_op = { {"3", '+'}, {"4", '|'}, {"5", '^'} };
+	std::map<std::string, Value>	choice_val = { {"1", one}, {"2", two} };
+
+	while (1)
+	{
+		std::cout << std::endl << KRED "\tJoker" KRESET " choice for " KYEL << this->_valueToStr(one) <<KRESET " and " KYEL << this->_valueToStr(two) << KRESET" :" << std::endl;
+		std::cout << KYEL "\t\t1" KRESET << " Left Value\n" << KYEL "\t\t2" KRESET << " Right Value\n" << KYEL "\t\t3" KRESET << " Operator '+'\n" << KYEL "\t\t4" KRESET << " Operator '|'\n" << KYEL "\t\t5" KRESET << " Operator '^'" << std::endl;
+		str.clear();
+		std::getline(std::cin, str);
+		if (str.empty())
+			break ;
+		if (str.length() == 1 and std::strstr("345", str.c_str()))
+			return (this->_chooseOperator(list, one, two, choice_op[str]));
+		if (str.length() == 1 and std::strstr("12", str.c_str()))
+			return (this->_factOrRevFact(list, choice_val[str]));
+	}
+	throw CustomException("Invalid User Joker Choise");
+	return (true);
+}
+
+bool 				Rule::_checkInput(void) const
+{
+	return ((std::cin.bad() || std::cin.eof()) ? false : true);
+}
+
+std::string 				Rule::_valueToStr(Value v) const
+{
+	if (v.s.empty())
+		return (v.b ? "true" : "false");
+	return (v.s);
 }
 
 /*

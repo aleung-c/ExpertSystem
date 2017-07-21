@@ -22,7 +22,7 @@ class GameController
 	public:
 	
 		GameController( void );
-		GameController( std::string query, std::map<char, Fact *> allFacts, bool verbose);
+		GameController( std::string query, std::map<char, Fact *> allFacts, bool verbose, bool final);
 		GameController( GameController const & src );
 		virtual ~GameController( void );
 
@@ -31,14 +31,21 @@ class GameController
 
 		std::string				getQuery( void ) const;
 		const mapFacts &		getAllFacts( void ) const;
+		bool					getVerbose( void ) const;
+		bool					getFinalResult( void ) const;
+
 
 		void					run( void );
 
 	private:
-		bool					_verbose;
 
 		std::string				_query;
 		mapFacts				_allFacts;
+		bool					_verbose;
+		bool					_finalResult;
+
+		void					_printFinalResult( void ) const;
+
 };
 
 std::ostream &				operator<<(std::ostream & o, GameController const & i);

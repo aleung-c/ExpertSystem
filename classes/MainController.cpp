@@ -49,8 +49,9 @@ void	MainController::Run(int argc, char **argv)
 					InputController.print(*it);
 
 					// II. Resolution handling
-					Game = GameController((*it).Query, InputController.getAllFacts(*it), ExpertSystemDatas->Verbose);
-					Game.run();
+					Game = new GameController((*it).Query, InputController.getAllFacts(*it), ExpertSystemDatas->Verbose, true);
+					Game->run();
+					delete Game;
 				}
 			}
 			catch (CustomException &e)
