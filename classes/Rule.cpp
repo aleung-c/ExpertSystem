@@ -137,6 +137,12 @@ void				Rule::SetResult(std::string str)
 
 // PRIVATE METHOD ################################################
 
+/*
+**  We compare the facts of a proposition's rule (A) with result's of a other (B)
+**  and the proposition B with result (A) for unknown behavior
+**	this->_communChar must be true for both
+*/
+
 bool				Rule::_checkUnknownBehavior(mapFacts list, Value v) const
 {
 	std::vector<Rule>	rules;
@@ -152,7 +158,7 @@ bool				Rule::_checkUnknownBehavior(mapFacts list, Value v) const
 	{
 		result = std::regex_replace(rules[i].GetResult().c_str(),word,"",std::regex_constants::format_default);
 		proposition = std::regex_replace(rules[i].GetProposition().c_str(), word, "", std::regex_constants::format_default);
-		if (this->_communChar(this->_proposition, result) && this->_communChar(this->_result, proposition)) /* We compare the facts of proposition's rule and result's of a other for unknown behavior */
+		if (this->_communChar(this->_proposition, result) && this->_communChar(this->_result, proposition))
 			return (true);
 	}
 	return (false);
