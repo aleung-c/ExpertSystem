@@ -41,12 +41,12 @@ void	MainController::Run(int argc, char **argv)
 					std::cout << std::endl << KCYN "------------------------------------------- " KRESET << std::endl;
 					std::cout << KCYN "  File: " << (*it).Path << std::endl;
 					std::cout << KCYN "------------------------------------------- " KRESET << std::endl;
-					InputController.print(*it);
+					// InputController.print(*it);
 					InputController.LexParse(*it);
 					InputController.FillValues(*it);
 
-					std::cout << KYEL "After Input: ------------" KRESET << std::endl;
-					InputController.print(*it);
+					// std::cout << KYEL "After Input: ------------" KRESET << std::endl;
+					// InputController.print(*it);
 
 					// II. Resolution handling
 					Game = new GameController((*it).Query, InputController.getAllFacts(*it), ExpertSystemDatas->Verbose, true);

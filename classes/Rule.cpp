@@ -48,7 +48,7 @@ Rule::~Rule ( void )
 
 // PUBLIC METHOD #################################################
 
-bool				Rule::IsCheck( mapFacts list ) const
+bool				Rule::IsCheck( mapFacts list, bool verbose ) const
 {
 	std::string				out;
 	std::stringstream		tmpstr(this->_poloneseInversed);
@@ -57,6 +57,7 @@ bool				Rule::IsCheck( mapFacts list ) const
 	Value					two;
 	Value					val;
 
+	std::cout << "Checking rule [ " KYEL << this->_proposition << KRESET " ] .........." ; 
 	while (tmpstr >> out)
 	{
 		if (std::strstr(OPERATORS, out.c_str()))
@@ -76,14 +77,14 @@ bool				Rule::IsCheck( mapFacts list ) const
 		}
 	}
 	if (facts.empty() || facts.top().s.empty())
-		return (facts.top().b);
+		return (this->_verboseOrNot(facts.top().b, verbose));
 
 	// In case we have a rule without operator
 	one = facts.top();
 	if (this->_checkUnknownBehavior(list, one))
 		throw CustomException("Unknown Behavior");
 
-	return (this->_factOrRevFact(list, one));
+	return (this->_verboseOrNot(this->_factOrRevFact(list, one), verbose));
 }
 
 // ###############################################################
@@ -137,10 +138,23 @@ void				Rule::SetResult(std::string str)
 
 // PRIVATE METHOD ################################################
 
+bool				Rule::_verboseOrNot( bool n, bool v ) const
+{
+	if (v)
+	{
+		std::cout << " with result ";
+		if (n)
+			std::cout << KGRN "true" KRESET << std::endl;
+		else
+			std::cout << KRED "false" KRESET << std::endl;
+	}
+	return (n);
+}
+
 /*
 **  We compare the facts of a proposition's rule (A) with result's of a other (B)
-**  and the proposition B with result (A) for unknown behavior
-**	this->_communChar must be true for both
+**  and the proposition (B) with result (A)
+**	this->_communChar must be true for both for unknown behavior
 */
 
 bool				Rule::_checkUnknownBehavior(mapFacts list, Value v) const

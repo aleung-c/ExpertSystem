@@ -55,11 +55,12 @@ GameController::GameController ( std::string query, mapFacts allFacts, bool verb
 
 void					GameController::run( void )
 {
+	std::cout << std::boolalpha;
 	for ( size_t i = 0 ; i < this->_query.length(); i++)
 	{
 		if (this->_query[i] != '?')
 		{
-			if ((this->_allFacts[this->_query[i]])->GetValueRules())
+			if ((this->_allFacts[this->_query[i]])->GetValueRules(this->_verbose))
 				std::cout << "Query for fact " KYEL << this->_query[i] << KRESET " is " KGRN << true << KRESET << std::endl;
 			else
 			{

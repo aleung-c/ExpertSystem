@@ -24,6 +24,7 @@ class Fact
 		std::vector<Rule>	LinkedRules;
 
 		bool				GetValueRules( void ) const; /* Final Value for a fact : check base value and callback rules */
+		bool				GetValueRules( bool verbose ) const;
 
 		// overload operator with polymorphism for easier algo
 		bool				operator+( Fact const & rhs );

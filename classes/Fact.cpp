@@ -87,7 +87,19 @@ bool					Fact::GetValueRules( void ) const
 		return (this->_value);
 
 	for(std::vector<Rule>::const_iterator it = this->LinkedRules.begin(); it != this->LinkedRules.end(); ++it)
-		if (it->IsCheck(this->_AllFacts))
+		if (it->IsCheck(this->_AllFacts, false))
+			return (true);
+
+	return(false);
+}
+
+bool					Fact::GetValueRules( bool verbose ) const
+{
+	if (this->_value || this->LinkedRules.empty())
+		return (this->_value);
+
+	for(std::vector<Rule>::const_iterator it = this->LinkedRules.begin(); it != this->LinkedRules.end(); ++it)
+		if (it->IsCheck(this->_AllFacts, verbose))
 			return (true);
 
 	return(false);
