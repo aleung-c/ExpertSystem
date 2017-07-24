@@ -41,7 +41,7 @@ int			InputController::getArgs()
 			CurFile.Path = path;
 			if (!CurFile.Str.empty())
 			{
-				std::cout << KGRN "InputController: File opened." KRESET << std::endl;
+				// std::cout << KGRN "InputController: File opened." KRESET << std::endl; // success print.
 				CurFile.NotAFile = false;
 			}
 			else

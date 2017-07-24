@@ -35,7 +35,7 @@ void		InputController::LexParse(t_ExpSysFile &file)
 		// STEP 6 : Are parenthesis well used?
 		if (checkParenthesis(file) != 0)
 			throw CustomException(KRED "InputController: Parser: Invalid use of parenthesis." KRESET);
-		std::cout << KGRN "InputController: PARSING SUCCESS" KRESET << std::endl;
+		// std::cout << KGRN "InputController: PARSING SUCCESS" KRESET << std::endl;
 	}
 }
 
@@ -163,7 +163,6 @@ int				InputController::checkTokenPositions(t_ExpSysFile &file)
 	for (std::list<t_token>::iterator it = file.TokenList.begin();
 		it != file.TokenList.end() ; it++)
 	{
-		// next = it++;
 		next = it;
 		next++;
 		// ------ SYMBOLS position check;

@@ -63,6 +63,21 @@ void		InputController::GetInput()
 	}
 }
 
+void		InputController::PrintFile(t_ExpSysFile &file)
+{
+	std::stringstream		progStream(file.Str);
+	std::string				line;
+
+	while (getline(progStream, line))
+	{
+		if (line[0])
+		{
+			std::cout << line << std::endl;
+		}
+	}
+	std::cout << std::endl;
+}
+
 // ------------------------------------------------------------	//
 //	File Opening												//
 //																//

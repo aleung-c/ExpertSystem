@@ -58,6 +58,7 @@ void					GameController::run( void )
 	std::cout << std::boolalpha;
 	for ( size_t i = 0 ; i < this->_query.length(); i++)
 	{
+		Rule::count = 0;
 		if (this->_query[i] != '?')
 		{
 			if ((this->_allFacts[this->_query[i]])->GetValueRules(this->_verbose))

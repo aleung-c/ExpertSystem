@@ -24,6 +24,7 @@ class InputController
 		void					Init(t_ExpertSystem *expertSystemDatas,
 										int argc, char **argv);
 		void					GetInput();
+		void					PrintFile(t_ExpSysFile &file);
 		void					LexParse(t_ExpSysFile &file);
 		void					FillValues(t_ExpSysFile &file);
 		void					fillFactsWithMap(t_ExpSysFile &file);

@@ -165,7 +165,7 @@ void	InputController::collectRules(t_ExpSysFile &file)
 				// 	<< "Result: " << newRule.GetResult() << std::endl;
 
 			// we got the rule, now we add it to the conclusional facts.
-			const char *result = newRule.GetResult().c_str();
+			std::string result = newRule.GetResult();
 			for (int i = 0; result[i]; i++)
 			{
 				if (result[i] >= 'A' && result[i] <= 'Z')
@@ -182,6 +182,8 @@ void		InputController::formatRule(Rule &newRule)
 {
 	std::size_t			tmp_pos;
 	std::string			proposition;
+	std::string			result;
+	std::string			name;
 
 	proposition = newRule.GetProposition();
 	// format "("
@@ -202,6 +204,21 @@ void		InputController::formatRule(Rule &newRule)
 		newRule.SetProposition(proposition);
 		tmp_pos = proposition.find(")", tmp_pos + 2); // +2 cause space was added in front.
 	}
+
+	// destroy parenthesis in result
+	result = newRule.GetResult();
+	std::replace(result.begin(), result.end(), '(', ' ');
+	std::replace(result.begin(), result.end(), ')', ' ');
+	newRule.SetResult(result);
+
+	// destroy "(" parenthesis in name's conclusion
+	name = newRule.GetName();
+	tmp_pos = name.find("=>", 0);
+	std::replace(name.begin() + tmp_pos, name.end(), '(', ' ');
+	std::replace(name.begin() + tmp_pos, name.end(), ')', ' ');
+	newRule.SetName(name);
+
+	// std::cout << newRule.GetResult() << std::endl;
 	// std::cout << KMAG "Rule fomatted: [" << newRule.GetProposition() << KRESET << std::endl;
 }
 

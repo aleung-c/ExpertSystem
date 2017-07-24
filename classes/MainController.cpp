@@ -45,6 +45,12 @@ void	MainController::Run(int argc, char **argv)
 					InputController.LexParse(*it);
 					InputController.FillValues(*it);
 
+					if (ExpertSystemDatas->Verbose)
+					{
+						std::cout << KYEL "File Content: ------------" KRESET << std::endl;
+						InputController.PrintFile(*it);
+					}
+
 					// std::cout << KYEL "After Input: ------------" KRESET << std::endl;
 					// InputController.print(*it);
 
