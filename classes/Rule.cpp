@@ -174,7 +174,7 @@ std::string			Rule::_strtrim(std::string str)
 
 std::string			Rule::_convertToNPI(std::string str)
 {
-	std::string				NPI;
+	std::string				npi;
 	std::string				out;
 	std::stringstream		tmpstr(str);
 	std::stack<std::string>	operators;
@@ -185,7 +185,7 @@ std::string			Rule::_convertToNPI(std::string str)
 		if (std::strstr(OPERATORS, out.c_str()))
 		{
 			if (!operators.empty() and priority[out.c_str()[0]] <= priority[operators.top()[0]])
-				this->_changeStack(NPI, operators);
+				this->_changeStack(npi, operators);
 			operators.push(out);
 		}
 		else if (std::strstr("(", out.c_str()))
@@ -193,20 +193,20 @@ std::string			Rule::_convertToNPI(std::string str)
 		else if (std::strstr(")", out.c_str()))
 		{
 			while (!std::strstr("(", operators.top().c_str()))
-				this->_changeStack(NPI, operators);
+				this->_changeStack(npi, operators);
 			operators.pop();
 		}
 		else
-			NPI += (out + " ");
+			npi += (out + " ");
 	}
 	while (!operators.empty())
-		this->_changeStack(NPI, operators);
-	return (this->_strtrim(NPI));
+		this->_changeStack(npi, operators);
+	return (this->_strtrim(npi));
 }
 
-void				Rule::_changeStack(std::string & NPI, std::stack<std::string> & operators)
+void				Rule::_changeStack(std::string & npi, std::stack<std::string> & operators)
 {
-	NPI += operators.top() + " ";
+	npi += operators.top() + " ";
 	operators.pop();
 }
 

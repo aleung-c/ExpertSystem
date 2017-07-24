@@ -16,7 +16,7 @@ int			InputController::getArgs()
 	// for each arg. check if 1 is option, else try to open file.
 	for (int i = 1; _argv[i]; i++)
 	{
-		if (i == 1 && strncmp(_argv[i], "--verbose", 9) == 0) // position 1 : OPTION ONLY
+		if (i == 1 && strnlen(_argv[i], 10) == 9 && strncmp(_argv[i], "--verbose", 9) == 0) // position 1 : OPTION ONLY
 		{
 			_expertSystemDatas->Verbose = true;
 			std::cout << KYEL "Verbose mode ON" KRESET << std::endl;
