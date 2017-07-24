@@ -24,6 +24,7 @@ Rule &				Rule::operator=( Rule const & rhs )
 	if (this != &rhs)
 	{
 		this->_name = rhs.GetName();
+		this->_verbose = rhs.GetVerbose();
 		this->_poloneseInversed = rhs.GetPoloneseInversed();
 		this->_proposition = rhs.GetProposition();
 		this->_result = rhs.GetResult();
@@ -39,6 +40,11 @@ Rule::~Rule ( void )
 // ###############################################################
 
 // CONSTRUCTOR POLYMORPHISM ######################################
+
+Rule::Rule ( bool verbose ) : _verbose(verbose)
+{
+	return ;
+}
 
 // ###############################################################
 
@@ -57,7 +63,8 @@ bool				Rule::IsCheck( mapFacts list, bool verbose ) const
 	Value					two;
 	Value					val;
 
-	std::cout << "Checking rule [ " KYEL << this->_proposition << KRESET " ] .........." ; 
+	if (this->_verbose)
+		std::cout << "Checking rule [ " KYEL << this->_proposition << KRESET " ] ..........";
 	while (tmpstr >> out)
 	{
 		if (std::strstr(OPERATORS, out.c_str()))
@@ -106,6 +113,10 @@ std::string			Rule::GetProposition( void ) const
 std::string			Rule::GetResult( void ) const
 {
 	return(this->_result);
+}
+bool				Rule::GetVerbose( void ) const
+{
+	return(this->_verbose);
 }
 
 // ###############################################################

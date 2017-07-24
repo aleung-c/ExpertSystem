@@ -143,7 +143,7 @@ void	InputController::collectRules(t_ExpSysFile &file)
 	std::string				line;
 	std::stringstream		progStream(file.Str);
 	std::size_t				pos;
-	Rule					newRule;
+	Rule					newRule(this->_expertSystemDatas->Verbose);
 
 	//	Ill search each rules, and insert them into the corresponding facts
 	//	thanks to the map container.

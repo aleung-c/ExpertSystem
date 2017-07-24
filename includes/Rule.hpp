@@ -15,6 +15,7 @@ class Rule
 	public:
 	
 		Rule( void );
+		Rule( bool verbose );
 		Rule( Rule const & src );
 		virtual ~Rule( void );
 
@@ -25,6 +26,7 @@ class Rule
 		std::string		GetPoloneseInversed( void ) const;
 		std::string		GetProposition( void ) const;
 		std::string		GetResult( void ) const;
+		bool			GetVerbose( void ) const;
 
 		// Setter
 		void			SetName(std::string name);
@@ -53,6 +55,7 @@ class Rule
 		std::string		_poloneseInversed;
 		std::string		_proposition;
 		std::string		_result;
+		bool			_verbose;
 };
 
 #endif
