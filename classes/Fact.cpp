@@ -99,8 +99,11 @@ bool					Fact::GetValueRules( bool verbose ) const
 		return (this->_value);
 
 	for(std::vector<Rule>::const_iterator it = this->LinkedRules.begin(); it != this->LinkedRules.end(); ++it)
+	{
 		if (it->IsCheck(this->_AllFacts, verbose))
 			return (true);
+		Rule::count = 0;
+	}
 
 	return(false);
 }

@@ -4,6 +4,7 @@
 #include <stack>
 
 # include "ExpertSystem.hpp"
+# define MAX_CHECK 20
 
 struct Value {
     bool b;
@@ -37,6 +38,7 @@ class Rule
 		// For algorythme
 		bool			IsCheck( mapFacts list, bool verbose ) const;
 
+		static unsigned int	count;
 	private:
 
 		std::string		_strtrim(std::string str); /* right trim called in setter Proposition/Result */
@@ -44,8 +46,6 @@ class Rule
 		bool			_chooseOperator(mapFacts list, Value one, Value two, char op) const;
 		bool			_factOrRevFact(mapFacts list, Value val) const;
 		void			_changeStack(std::string & NPI, std::stack<std::string>	& operators);
-		bool			_checkUnknownBehavior(mapFacts list, Value v) const;
-		bool			_communChar(std::string str, std::string tofind) const;
 		bool			_verboseOrNot( bool n, bool v ) const;
 		bool			_jokerChoice(mapFacts list, Value one, Value two) const;
 		bool			_checkInput(void) const;
@@ -56,6 +56,7 @@ class Rule
 		std::string		_proposition;
 		std::string		_result;
 		bool			_verbose;
+
 };
 
 #endif

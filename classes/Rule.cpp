@@ -4,6 +4,8 @@
 
 // STATIC ########################################################
 
+unsigned int	Rule::count = 0;
+
 // ###############################################################
 
 // CANONICAL #####################################################
@@ -63,6 +65,7 @@ bool				Rule::IsCheck( mapFacts list, bool verbose ) const
 	Value					two;
 	Value					val;
 
+	Rule::count += 1;
 	if (this->_verbose)
 		std::cout << "Checking rule [ " KYEL << this->_proposition << KRESET " ] ..........";
 	while (tmpstr >> out)
@@ -85,13 +88,8 @@ bool				Rule::IsCheck( mapFacts list, bool verbose ) const
 	}
 	if (facts.empty() || facts.top().s.empty())
 		return (this->_verboseOrNot(facts.top().b, verbose));
-
 	// In case we have a rule without operator
-	one = facts.top();
-	if (this->_checkUnknownBehavior(list, one))
-		throw CustomException("Unknown Behavior");
-
-	return (this->_verboseOrNot(this->_factOrRevFact(list, one), verbose));
+	return (this->_verboseOrNot(this->_factOrRevFact(list, facts.top()), verbose));
 }
 
 // ###############################################################
@@ -160,41 +158,6 @@ bool				Rule::_verboseOrNot( bool n, bool v ) const
 			std::cout << KRED "false" KRESET << std::endl;
 	}
 	return (n);
-}
-
-/*
-**  We compare the facts of a proposition's rule (A) with result's of a other (B)
-**  and the proposition (B) with result (A)
-**	this->_communChar must be true for both for unknown behavior
-*/
-
-bool				Rule::_checkUnknownBehavior(mapFacts list, Value v) const
-{
-	std::vector<Rule>	rules;
-	std::regex			word("[=|>| ]");
-	std::string			result;
-	std::string			proposition;
-
-	if (v.s.empty())
-		return (false);
-
-	rules = (v.s[0] == '!') ? list[v.s[1]]->LinkedRules : list[v.s[0]]->LinkedRules;
-	for(unsigned int i = 0 ; i < rules.size(); i++)
-	{
-		result = std::regex_replace(rules[i].GetResult().c_str(),word,"",std::regex_constants::format_default);
-		proposition = std::regex_replace(rules[i].GetProposition().c_str(), word, "", std::regex_constants::format_default);
-		if (this->_communChar(this->_proposition, result) && this->_communChar(this->_result, proposition))
-			return (true);
-	}
-	return (false);
-}
-
-bool				Rule::_communChar(std::string str, std::string tofind) const
-{
-	for (size_t i = 0; i < tofind.size(); i++)
-		if (std::strchr(str.c_str(), tofind[i]) != NULL)
-			return (true);
-	return (false);
 }
 
 std::string			Rule::_strtrim(std::string str)
@@ -274,7 +237,7 @@ bool				Rule::_jokerChoice(mapFacts list, Value one, Value two) const
 
 	while (1)
 	{
-		std::cout << std::endl << KRED "\tJoker" KRESET " choice for " KYEL << this->_valueToStr(one) <<KRESET " and " KYEL << this->_valueToStr(two) << KRESET" :" << std::endl;
+		std::cout << std::endl << KRED "\tJoker" KRESET " choice for " KYEL << this->_valueToStr(one) <<KRESET " and " KYEL << this->_valueToStr(two) << KRESET" on " KYEL << this->GetProposition() << KRESET " :" << std::endl;
 		std::cout << KYEL "\t\t1" KRESET << " Left Value\n" << KYEL "\t\t2" KRESET << " Right Value\n" << KYEL "\t\t3" KRESET << " Operator '+'\n" << KYEL "\t\t4" KRESET << " Operator '|'\n" << KYEL "\t\t5" KRESET << " Operator '^'" << std::endl;
 		str.clear();
 		std::getline(std::cin, str);
@@ -285,7 +248,7 @@ bool				Rule::_jokerChoice(mapFacts list, Value one, Value two) const
 		if (str.length() == 1 and std::strstr("12", str.c_str()))
 			return (this->_factOrRevFact(list, choice_val[str]));
 	}
-	throw CustomException("Invalid User Joker Choise");
+	throw CustomException("Invalid User Joker Choice");
 	return (true);
 }
 
@@ -307,6 +270,8 @@ std::string 				Rule::_valueToStr(Value v) const
 
 bool				Rule::_factOrRevFact(mapFacts list, Value val) const
 {
+	if (Rule::count > MAX_CHECK)
+		throw CustomException("Unknown Behavior");
 	if (val.s.empty())
 		return (val.b);
 	return ((val.s[0] == '!') ? !list[val.s[1]]->GetValueRules() : list[val.s[0]]->GetValueRules());
