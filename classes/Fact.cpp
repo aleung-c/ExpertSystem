@@ -159,7 +159,12 @@ void					Fact::SetAllFacts(mapFacts f)
 
 std::ostream &				operator<<(std::ostream & o, Fact const & i)
 {
-	o << "Fact: " KGRN <<  i.GetName() << KRESET " has base value: " KGRN << std::boolalpha << i.GetValue() << KRESET;
+	o << "Fact: " KGRN <<  i.GetName() << KRESET " has base value: ";
+	if (i.GetValue())
+		o <<  KGRN; 
+	else
+		o << KRED; 
+	o << std::boolalpha << i.GetValue() << KRESET;
 	if (i.LinkedRules.empty())	
 		o << " with no Rule.";
 	else

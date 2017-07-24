@@ -120,12 +120,11 @@ void					GameController::_printFinalResult( void ) const
 std::ostream &			operator<<(std::ostream & o, GameController const & i)
 {
 	o << KYEL "In GameController: ------------" KRESET << std::endl;
+	o << std::endl;
 	o << "Query: " KGRN << i.getQuery() << std::endl << KRESET "Facts:" << std::endl;
-	for(mapFacts::const_iterator it = i.getAllFacts().begin();
-    	it != i.getAllFacts().end(); ++it)
-	{
+	for(mapFacts::const_iterator it = i.getAllFacts().begin(); it != i.getAllFacts().end(); ++it)
     	o << "\t" << (*it->second);
-	}
+	o << std::endl;
 	return (o);
 }
 
