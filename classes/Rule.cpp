@@ -221,7 +221,7 @@ bool				Rule::_chooseOperator(mapFacts list, Value one, Value two, char op) cons
 	else if (op == '+')
 		return (this->_factOrRevFact(list, one) && this->_factOrRevFact(list, two));
 	else if (op == '^')
-		return (this->_factOrRevFact(list, one) && this->_factOrRevFact(list, two));
+		return (this->_factOrRevFact(list, one) ^ this->_factOrRevFact(list, two));
 	return (this->_jokerChoice(list, one, two));
 }
 
