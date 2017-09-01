@@ -1,6 +1,6 @@
 # ExpertSystem
 
-Backward-chaining inference engine.
+Backward-chaining inference engine. By [aleung-c](https://github.com/aleung-c) and [ocarta-l](https://github.com/ocarta-l).
 
 This two-man project is a simple inference engine. That means it is a program that makes deductions.
 For this project, we used object oriented C++ with basic design patterns over the course of half a week.
