@@ -44,4 +44,4 @@ We enter the symptoms into the expert system, and we ask 'what is the illness ?'
 Example output:
 ![Alt text](./screens/expert_system_1.png "ExpertSystem screenshot 2")
 
-Well this program is the basis of that. For more on expert system, see [this page](https://en.wikipedia.org/wiki/Expert_system).
+For more on expert system, see [this page](https://en.wikipedia.org/wiki/Expert_system).
